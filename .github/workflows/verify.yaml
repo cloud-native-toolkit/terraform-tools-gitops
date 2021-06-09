@@ -1,0 +1,66 @@
+name: Verify and release module
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  verify:
+    if: ${{ !contains( github.event.pull_request.labels.*.name, 'skip ci' ) }}
+    runs-on: ubuntu-latest
+    container: quay.io/ibmgaragecloud/cli-tools:v13
+
+    strategy:
+      matrix:
+        platform: [ocp4_latest]
+      #      max-parallel: 1
+      fail-fast: false
+
+    env:
+      HOME: /home/devops
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Verify deploy on ${{ matrix.platform }}
+        uses: ibm-garage-cloud/action-module-verify-deploy@main
+        with:
+          clusterId: ${{ matrix.platform }}
+          validateDeployScript: .github/scripts/validate-deploy.sh
+        env:
+          TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
+          IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
+
+      - name: Verify destroy on ${{ matrix.platform }}
+        uses: ibm-garage-cloud/action-module-verify-destroy@main
+        if: ${{ always() }}
+        with:
+          clusterId: ${{ matrix.platform }}
+        env:
+          TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
+          IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
+
+
+  release:
+    #    if: ${{ github.event_name == 'push' }}
+    needs: verify
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "main"
+      - uses: release-drafter/release-drafter@v5
+        with:
+          # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+          config-name: release-drafter.yaml
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
