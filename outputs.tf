@@ -1,5 +1,50 @@
-#output "myoutput" {
-#  description = "Description of my output"
-#  value       = "value"
-#  depends_on  = [<some resource>]
-#}
+
+output "config_repo" {
+  value = module.gitops-repo.repo
+  description = "The repo that contains the argocd configuration"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "config_token" {
+  value       = module.gitops-repo.token
+  description = "The token for the config repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "config_paths" {
+  description = "The paths in the config repo"
+  value = {
+    infrastructure = "argocd/1-infrastructure/active"
+    services       = "argocd/2-services/active"
+    applications   = "argocd/3-applications/active"
+  }
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "bootstrap_path" {
+  description = "The path to the bootstrap configuration"
+  value       = "argocd/0-bootstrap/bootstrap"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "application_repo" {
+  value = module.gitops-repo.repo
+  description = "The repo that contains the application configuration"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "application_token" {
+  value       = module.gitops-repo.token
+  description = "The token for the application repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "application_paths" {
+  description = "The paths in the application repo"
+  value = {
+    infrastructure = "payload/1-infrastructure"
+    services       = "payload/2-services"
+    applications   = "payload/3-applications"
+  }
+  depends_on = [null_resource.initialize_gitops]
+}
