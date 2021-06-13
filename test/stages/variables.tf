@@ -48,3 +48,29 @@ variable "vpc_cluster" {
   description = "Flag indicating that this is a vpc cluster"
   default     = false
 }
+
+variable "git_token" {
+  type        = string
+  description = "Git token"
+}
+
+variable "git_host" {
+  type        = string
+  default     = "github.com"
+}
+
+variable "git_type" {
+  default = "github"
+}
+
+variable "git_org" {
+  default = "seansund"
+}
+
+variable "git_repo" {
+  default = "git-module-test"
+}
+
+variable "gitops_namespace" {
+  default = "openshift-gitops"
+}

@@ -1,0 +1,33 @@
+global:
+  repoUrl: ""
+  targetRevision: ""
+  targetNamespace: ""
+  destinations:
+    - targetNamespace: ""
+
+infrastructure:
+  project: 1-infrastructure
+
+  applicationTargets:
+    - applications:
+      - name: 1-infrastructure
+        path: argocd/1-infrastructure/active
+        type: directory
+
+services:
+  project: 2-services
+
+  applicationTargets:
+    - applications:
+      - name: 2-services
+        path: argocd/2-services/active
+        type: directory
+
+applications:
+  project: 3-applications
+
+  applicationTargets:
+    - applications:
+      - name: 3-applications
+        path: argocd/3-applications/active
+        type: directory

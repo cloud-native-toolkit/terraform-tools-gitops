@@ -35,6 +35,7 @@ jobs:
           clusterId: ${{ matrix.platform }}
           validateDeployScript: .github/scripts/validate-deploy.sh
         env:
+          TF_VAR_git_token: ${{ secrets.GIT_ADMIN_TOKEN }}
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
           IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
 
@@ -44,6 +45,7 @@ jobs:
         with:
           clusterId: ${{ matrix.platform }}
         env:
+          TF_VAR_git_token: ${{ secrets.GIT_ADMIN_TOKEN }}
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
           IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
 
