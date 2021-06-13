@@ -1,12 +1,12 @@
 module "gitops" {
   source = "./module"
 
-  host = "github.com"
-  type = "github"
-  org  = "seansund"
-  repo = "git-module-test"
+  host = var.git_host
+  type = var.git_type
+  org  = var.git_org
+  repo = var.git_repo
   token = var.git_token
-  gitops_namespace = "openshift-gitops"
+  gitops_namespace = var.gitops_namespace
 }
 
 resource null_resource gitops_output {
