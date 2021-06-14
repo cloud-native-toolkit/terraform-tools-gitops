@@ -21,6 +21,16 @@ output "config_paths" {
   depends_on = [null_resource.initialize_gitops]
 }
 
+output "config_projects" {
+  description = "The ArgoCD projects for the different layers of the repo"
+  value = {
+    infrastructure = "1-infrastructure"
+    services       = "2-services"
+    applications   = "3-applications"
+  }
+  depends_on = [null_resource.initialize_gitops]
+}
+
 output "bootstrap_path" {
   description = "The path to the bootstrap configuration"
   value       = "argocd/0-bootstrap/bootstrap"
