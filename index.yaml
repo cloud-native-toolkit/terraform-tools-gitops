@@ -10,6 +10,27 @@ versions:
   - platforms: []
     dependencies: []
     variables: [{name: host, type: string, description: The host for the git repository.}, {name: type, type: string, description: The type of the hosted git repository (github or gitlab).}, {name: org, type: string, description: The org/group where the git repository exists/will be provisioned.}, {name: repo, type: string, description: "variable \"repo\" {\n  type        = string\n  description = \"A description of my"}, {name: 'variable"~}~~', type: string}, {name: provision, type: bool, description: "variable \"provision\" {\n  type        = bool\n  description = \"A description of my"}, {name: 'variable"~  default     = true~}~~', type: string, default: "true", optional: true}, {name: token, type: string, description: The personal access token used to access the repository}, {name: public, type: bool, description: Flag indicating that the repo should be public or private, default: false, optional: true}, {name: gitops_namespace, type: string, description: The namespace where ArgoCD is running in the cluster}]
+    version: v1.1.0
+    outputs:
+      - name: config_repo
+        description: The repo that contains the argocd configuration
+      - name: config_token
+        description: The token for the config repo
+      - name: config_paths
+        description: The paths in the config repo
+      - name: config_projects
+        description: The ArgoCD projects for the different layers of the repo
+      - name: bootstrap_path
+        description: The path to the bootstrap configuration
+      - name: application_repo
+        description: The repo that contains the application configuration
+      - name: application_token
+        description: The token for the application repo
+      - name: application_paths
+        description: The paths in the application repo
+  - platforms: []
+    dependencies: []
+    variables: [{name: host, type: string, description: The host for the git repository.}, {name: type, type: string, description: The type of the hosted git repository (github or gitlab).}, {name: org, type: string, description: The org/group where the git repository exists/will be provisioned.}, {name: repo, type: string, description: "variable \"repo\" {\n  type        = string\n  description = \"A description of my"}, {name: 'variable"~}~~', type: string}, {name: provision, type: bool, description: "variable \"provision\" {\n  type        = bool\n  description = \"A description of my"}, {name: 'variable"~  default     = true~}~~', type: string, default: "true", optional: true}, {name: token, type: string, description: The personal access token used to access the repository}, {name: public, type: bool, description: Flag indicating that the repo should be public or private, default: false, optional: true}, {name: gitops_namespace, type: string, description: The namespace where ArgoCD is running in the cluster}]
     version: v1.0.0
     outputs:
       - name: config_repo
