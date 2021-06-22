@@ -24,6 +24,11 @@ variable "provision" {
   default     = true
 }
 
+variable "username" {
+  type        = string
+  description = "The username of the user with access to the repository"
+}
+
 variable "token" {
   type        = string
   description = "The personal access token used to access the repository"

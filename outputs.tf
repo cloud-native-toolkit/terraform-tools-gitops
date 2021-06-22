@@ -5,6 +5,12 @@ output "config_repo" {
   depends_on = [null_resource.initialize_gitops]
 }
 
+output "config_username" {
+  value       = var.username
+  description = "The username for the config repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
 output "config_token" {
   value       = module.gitops-repo.token
   description = "The token for the config repo"
@@ -40,6 +46,12 @@ output "bootstrap_path" {
 output "application_repo" {
   value = module.gitops-repo.repo
   description = "The repo that contains the application configuration"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "application_username" {
+  value       = var.username
+  description = "The username for the application repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
