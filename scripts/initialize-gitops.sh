@@ -11,6 +11,8 @@ YQ=$(command -v yq || command -v "${BIN_DIR}/yq")
 REPO="$1"
 NAMESPACE="$2"
 
+REPO_URL="https://${REPO}"
+
 mkdir -p .tmpgitops
 
 git config --global user.email "cloudnativetoolkit@gmail.com"
@@ -26,7 +28,7 @@ cp -R "${TEMPLATE_DIR}"/* .
 
 # Set global.repoUrl, global.targetRevision, global.targetNamespace, global.destinations[0].targetNamespace
 cat argocd/0-bootstrap/bootstrap/values.yaml | \
-  "${YQ}" w - 'global.repoUrl' "${REPO}" | \
+  "${YQ}" w - 'global.repoUrl' "${REPO_URL}" | \
   "${YQ}" w - 'global.targetRevision' "${BRANCH}" | \
   "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" | \
   "${YQ}" w - 'global.destinations[0].targetNamespace' "${NAMESPACE}" > newvalues.yaml
