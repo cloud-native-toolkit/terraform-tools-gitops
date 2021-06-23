@@ -5,6 +5,12 @@ output "config_repo" {
   depends_on = [null_resource.initialize_gitops]
 }
 
+output "config_repo_url" {
+  value = module.gitops-repo.url
+  description = "The repo that contains the argocd configuration"
+  depends_on = [null_resource.initialize_gitops]
+}
+
 output "config_username" {
   value       = var.username
   description = "The username for the config repo"
@@ -45,6 +51,12 @@ output "bootstrap_path" {
 
 output "application_repo" {
   value = module.gitops-repo.repo
+  description = "The repo that contains the application configuration"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "application_repo_url" {
+  value = module.gitops-repo.url
   description = "The repo that contains the application configuration"
   depends_on = [null_resource.initialize_gitops]
 }
