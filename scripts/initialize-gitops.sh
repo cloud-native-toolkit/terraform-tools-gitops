@@ -30,8 +30,7 @@ cp -R "${TEMPLATE_DIR}"/* .
 cat argocd/0-bootstrap/bootstrap/values.yaml | \
   "${YQ}" w - 'global.repoUrl' "${REPO_URL}" | \
   "${YQ}" w - 'global.targetRevision' "${BRANCH}" | \
-  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" | \
-  "${YQ}" w - 'global.destinations[0].targetNamespace' "${NAMESPACE}" > newvalues.yaml
+  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" > newvalues.yaml
 cp newvalues.yaml argocd/0-bootstrap/bootstrap/values.yaml && rm newvalues.yaml
 
 git add .
