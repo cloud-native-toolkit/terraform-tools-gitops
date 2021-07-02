@@ -24,14 +24,14 @@ appVersion: 1.16.0
 
 dependencies:
   - name: argocd-config
-    version: 0.18.2
+    version: 0.18.3
     repository: https://charts.cloudnativetoolkit.dev/
     alias: infrastructure
   - name: argocd-config
-    version: 0.18.2
+    version: 0.18.3
     repository: https://charts.cloudnativetoolkit.dev/
     alias: services
   - name: argocd-config
-    version: 0.18.2
+    version: 0.18.3
     repository: https://charts.cloudnativetoolkit.dev/
     alias: applications
