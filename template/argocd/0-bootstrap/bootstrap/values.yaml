@@ -3,7 +3,7 @@ global:
   targetRevision: ""
   targetNamespace: ""
   destinations:
-    - targetNamespace: ""
+    - targetNamespace: "*"
 
 infrastructure:
   project: 1-infrastructure
