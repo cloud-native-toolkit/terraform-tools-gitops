@@ -13,7 +13,7 @@ jobs:
   verify:
     if: ${{ !contains( github.event.pull_request.labels.*.name, 'skip ci' ) }}
     runs-on: ubuntu-latest
-    container: quay.io/ibmgaragecloud/cli-tools:v13
+    container: quay.io/ibmgaragecloud/cli-tools:v14
 
     strategy:
       matrix:

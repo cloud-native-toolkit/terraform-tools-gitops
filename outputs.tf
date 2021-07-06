@@ -20,7 +20,8 @@ output "config_username" {
 output "config_token" {
   value       = module.gitops-repo.token
   description = "The token for the config repo"
-  depends_on = [null_resource.initialize_gitops]
+  sensitive   = true
+  depends_on  = [null_resource.initialize_gitops]
 }
 
 output "config_paths" {
@@ -70,7 +71,8 @@ output "application_username" {
 output "application_token" {
   value       = module.gitops-repo.token
   description = "The token for the application repo"
-  depends_on = [null_resource.initialize_gitops]
+  depends_on  = [null_resource.initialize_gitops]
+  sensitive   = true
 }
 
 output "application_paths" {
