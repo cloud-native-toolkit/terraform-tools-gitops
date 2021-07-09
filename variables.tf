@@ -44,3 +44,15 @@ variable "gitops_namespace" {
   type        = string
   description = "The namespace where ArgoCD is running in the cluster"
 }
+
+variable "banner_label" {
+  type        = string
+  description = "The label for the cluster"
+  default     = "cluster"
+}
+
+variable "banner_color" {
+  type        = string
+  description = "The color for the cluster"
+  default     = "purple"
+}
