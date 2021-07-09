@@ -1,0 +1,9 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+  name: top-banner
+spec:
+  backgroundColor: purple
+  color: '#fff'
+  location: BannerTop
+  text: cluster
