@@ -84,3 +84,16 @@ output "application_paths" {
   }
   depends_on = [null_resource.initialize_gitops]
 }
+
+output "gitops_config" {
+  description = "Config information regarding the gitops repo structure"
+  value = local.gitops_config
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "git_credentials" {
+  description = "The credentials for the gitops repo(s)"
+  value = local.git_credentials
+  depends_on = [null_resource.initialize_gitops]
+  sensitive = true
+}

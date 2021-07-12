@@ -66,6 +66,10 @@ cat "${CONFIG_DIR}/console-notification-top.yaml" | \
 cat "${CONFIG_DIR}/console-link-gitops.yaml" | \
   "${YQ}" w - 'spec.href' "https://${APPLICATION_REPO}" > "${CLUSTER_DIR}/console-link-gitops.yaml"
 
+if [[ -n "${CONFIG}" ]]; then
+  echo "${CONFIG}" > config.yaml
+fi
+
 git add .
 git commit -m "Populates initial gitops structure"
 git push origin "${BRANCH}"
