@@ -50,6 +50,12 @@ output "bootstrap_path" {
   depends_on = [null_resource.initialize_gitops]
 }
 
+output "bootstrap_branch" {
+  description = "The branch in the gitrepo containing the bootstrap configuration"
+  value       = module.gitops-repo.branch
+  depends_on = [null_resource.initialize_gitops]
+}
+
 output "application_repo" {
   value = module.gitops-repo.repo
   description = "The repo that contains the application configuration"

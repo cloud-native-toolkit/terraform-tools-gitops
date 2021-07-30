@@ -58,13 +58,14 @@ locals {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.2.1"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.3.0"
 
   host  = var.host
   type  = var.type
   org   = var.org
   repo  = var.repo
   token = var.token
+  branch = var.branch
 }
 
 resource null_resource initialize_gitops {
