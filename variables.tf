@@ -15,7 +15,13 @@ variable "org" {
 
 variable "repo" {
   type        = string
-  description = "A description of my variable"
+  description = "The short name of the repository (i.e. the part after the org/group name)"
+}
+
+variable "branch" {
+  type        = string
+  description = "The name of the branch that will be used. If the repo already exists (provision=false) then it is assumed this branch already exists as well"
+  default     = "main"
 }
 
 variable "provision" {
