@@ -26,7 +26,7 @@ variable "branch" {
 
 variable "provision" {
   type        = bool
-  description = "A description of my variable"
+  description = "Flag indicating that the git repo should be provisioned. If `false` then the repo is expected to already exist"
   default     = true
 }
 
