@@ -49,6 +49,7 @@ variable "public" {
 variable "gitops_namespace" {
   type        = string
   description = "The namespace where ArgoCD is running in the cluster"
+  default     = "openshift-gitops"
 }
 
 variable "banner_label" {
