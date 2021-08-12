@@ -1,5 +1,5 @@
 apiVersion: v2
-name: bootstrap
+name: cluster-config
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
@@ -23,15 +23,18 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
-  - name: argocd-config
-    version: 0.18.3
+  - name: console-link-configmap
+    version: 0.1.0
     repository: https://charts.cloudnativetoolkit.dev/
-    alias: infrastructure
-  - name: argocd-config
-    version: 0.18.3
+    alias: cntk-dev-guide
+  - name: console-link-configmap
+    version: 0.1.0
     repository: https://charts.cloudnativetoolkit.dev/
-    alias: services
-  - name: argocd-config
-    version: 0.18.3
+    alias: first-app
+  - name: console-link-configmap
+    version: 0.1.0
     repository: https://charts.cloudnativetoolkit.dev/
-    alias: applications
+    alias: gitops
+  - name: ocp-console-notification
+    version: 0.2.0
+    repository: https://charts.cloudnativetoolkit.dev/

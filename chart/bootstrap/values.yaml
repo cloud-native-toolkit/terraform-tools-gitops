@@ -4,6 +4,7 @@ global:
   targetNamespace: ""
   destinations:
     - targetNamespace: "*"
+  pathSuffix: ""
 
 infrastructure:
   project: 1-infrastructure
@@ -11,8 +12,7 @@ infrastructure:
   applicationTargets:
     - applications:
       - name: 1-infrastructure
-        path: argocd/1-infrastructure/active
-        type: directory
+        path: argocd/1-infrastructure
 
 services:
   project: 2-services
@@ -20,8 +20,7 @@ services:
   applicationTargets:
     - applications:
       - name: 2-services
-        path: argocd/2-services/active
-        type: directory
+        path: argocd/2-services
 
 applications:
   project: 3-applications
@@ -29,5 +28,4 @@ applications:
   applicationTargets:
     - applications:
       - name: 3-applications
-        path: argocd/3-applications/active
-        type: directory
+        path: argocd/3-applications

@@ -1,12 +1,12 @@
 dependencies:
 - name: argocd-config
   repository: https://charts.cloudnativetoolkit.dev/
-  version: 0.18.3
+  version: 0.20.0
 - name: argocd-config
   repository: https://charts.cloudnativetoolkit.dev/
-  version: 0.18.3
+  version: 0.20.0
 - name: argocd-config
   repository: https://charts.cloudnativetoolkit.dev/
-  version: 0.18.3
-digest: sha256:34777a58cf6f606f2b3ca5ac22992fc65561fa0d65787f9f30f87a0e31261a61
-generated: "2021-07-02T10:53:11.642224-05:00"
+  version: 0.20.0
+digest: sha256:fdbb05d93b16d5c4877dddc38b925febd79ac7608ce0cf86d9fe3ee0ed6d3374
+generated: "2021-08-11T23:22:15.896332-05:00"
