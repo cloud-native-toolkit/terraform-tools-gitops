@@ -1,12 +1,13 @@
 
 locals {
+  bootstrap_path = "argocd/0-bootstrap/cluster/${var.serverName}"
   gitops_config = {
     boostrap = {
       argocd-config = {
         project = "bootstrap"
         repo = module.gitops-repo.repo
         url = module.gitops-repo.url
-        path = "argocd/0-bootstrap/bootstrap"
+        path = "argocd/0-bootstrap"
       }
     }
     infrastructure = {
@@ -14,7 +15,7 @@ locals {
         project = "1-infrastructure"
         repo = module.gitops-repo.repo
         url = module.gitops-repo.url
-        path = "argocd/1-infrastructure/active"
+        path = "argocd/1-infrastructure"
       }
       payload = {
         repo = module.gitops-repo.repo
@@ -27,7 +28,7 @@ locals {
         project = "2-services"
         repo = module.gitops-repo.repo
         url = module.gitops-repo.url
-        path = "argocd/2-services/active"
+        path = "argocd/2-services"
       }
       payload = {
         repo = module.gitops-repo.repo
@@ -40,7 +41,7 @@ locals {
         project = "3-applications"
         repo = module.gitops-repo.repo
         url = module.gitops-repo.url
-        path = "argocd/3-applications/active"
+        path = "argocd/3-applications"
       }
       payload = {
         repo = module.gitops-repo.repo

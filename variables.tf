@@ -63,3 +63,9 @@ variable "banner_color" {
   description = "The color for the cluster"
   default     = "purple"
 }
+
+variable "serverName" {
+  type        = string
+  description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"
+  default     = "default"
+}

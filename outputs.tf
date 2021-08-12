@@ -46,7 +46,7 @@ output "config_projects" {
 
 output "bootstrap_path" {
   description = "The path to the bootstrap configuration"
-  value       = "argocd/0-bootstrap/bootstrap"
+  value       = local.bootstrap_path
   depends_on = [null_resource.initialize_gitops]
 }
 

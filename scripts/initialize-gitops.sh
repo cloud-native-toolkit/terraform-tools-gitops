@@ -6,13 +6,15 @@ SCRIPT_DIR=$(cd $(dirname "$0"); pwd -P)
 CONFIG_DIR=$(cd "${SCRIPT_DIR}/../config"; pwd -P)
 TEMPLATE_DIR=$(cd "${SCRIPT_DIR}/../template"; pwd -P)
 BIN_DIR=$(cd "${SCRIPT_DIR}/../bin"; pwd -P)
+CHART_DIR=$(cd "${SCRIPT_DIR}/../chart"; pwd -P)
 
 YQ=$(command -v yq || command -v "${BIN_DIR}/yq")
 
 REPO="$1"
 NAMESPACE="$2"
-BANNER_LABEL="$3"
-BANNER_COLOR="$4"
+SERVER_NAME="$3"
+BANNER_LABEL="$4"
+BANNER_COLOR="$5"
 
 REPO_URL="https://${REPO}"
 
@@ -29,42 +31,19 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 cp -R "${TEMPLATE_DIR}"/* .
 
-# Set global.repoUrl, global.targetRevision, global.targetNamespace, global.destinations[0].targetNamespace
-cat argocd/0-bootstrap/bootstrap/values.yaml | \
+mkdir -p "argocd/0-bootstrap/cluster/${SERVER_NAME}"
+
+cp -R "${CHART_DIR}/bootstrap" "argocd/0-bootstrap/cluster/${SERVER_NAME}"
+
+cat "${CHART_DIR}/bootstrap/Chart.yaml" | \
+  "${YQ}" w - 'name' "${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml"
+
+cat "${CHART_DIR}/bootstrap/values.yaml" | \
   "${YQ}" w - 'global.repoUrl' "${REPO_URL}" | \
   "${YQ}" w - 'global.targetRevision' "${BRANCH}" | \
-  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" > newvalues.yaml
-cp newvalues.yaml argocd/0-bootstrap/bootstrap/values.yaml && rm newvalues.yaml
+  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" | \
+  "${YQ}" w - 'global.pathSuffix' "cluster/${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
 
-CLUSTER_DIR="payload/1-infrastructure/cluster"
-mkdir -p ${CLUSTER_DIR}
-
-cat > "argocd/1-infrastructure/active/cluster.yaml" <<EOL
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: cluster-${BRANCH}
-spec:
-  destination:
-    namespace: ${NAMESPACE}
-    server: "https://kubernetes.default.svc"
-  project: ${PROJECT}
-  source:
-    path: ${CLUSTER_DIR}
-    repoURL: https://${APPLICATION_REPO}
-    targetRevision: ${BRANCH}
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-EOL
-
-cat "${CONFIG_DIR}/console-notification-top.yaml" | \
-  "${YQ}" w - 'spec.color' "${BANNER_COLOR}" | \
-  "${YQ}" w - 'spec.text' "${BANNER_LABEL}" > "${CLUSTER_DIR}/console-notification-top.yaml"
-
-cat "${CONFIG_DIR}/console-link-gitops.yaml" | \
-  "${YQ}" w - 'spec.href' "https://${APPLICATION_REPO}" > "${CLUSTER_DIR}/console-link-gitops.yaml"
 
 if [[ -n "${CONFIG}" ]]; then
   echo "${CONFIG}" > config.yaml
