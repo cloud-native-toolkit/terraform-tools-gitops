@@ -103,3 +103,9 @@ output "git_credentials" {
   depends_on = [null_resource.initialize_gitops]
   sensitive = true
 }
+
+output "server_name" {
+  description = "The name of the cluster that will be configured for gitops"
+  value = var.serverName
+  depends_on = [null_resource.initialize_gitops]
+}
