@@ -1,6 +1,6 @@
 
 locals {
-  bootstrap_path = "argocd/0-bootstrap/cluster/${var.serverName}"
+  bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
   gitops_config = {
     boostrap = {
       argocd-config = {
@@ -72,7 +72,7 @@ module "gitops-repo" {
 resource null_resource initialize_gitops {
 
   provisioner "local-exec" {
-    command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.banner_label}' '${var.banner_color}'"
+    command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}' '${var.banner_label}' '${var.banner_color}'"
 
     environment = {
       TOKEN = module.gitops-repo.token
