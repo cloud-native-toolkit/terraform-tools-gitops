@@ -15,6 +15,8 @@ SERVER_NAME="$3"
 BANNER_LABEL="$4"
 BANNER_COLOR="$5"
 
+PATH_SUFFIX="cluster/${SERVER_NAME}"
+
 REPO_URL="https://${REPO}"
 
 mkdir -p .tmpgitops
@@ -34,15 +36,13 @@ mkdir -p "argocd/0-bootstrap/cluster/${SERVER_NAME}"
 
 cp -R "${CHART_DIR}/bootstrap" "argocd/0-bootstrap/cluster/${SERVER_NAME}"
 
-cat "${CHART_DIR}/bootstrap/Chart.yaml" | \
-  "${YQ}" w - 'name' "${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml"
+"${YQ}" eval '.name = env(SERVER_NAME)' "${CHART_DIR}/bootstrap/Chart.yaml" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml"
 
 cat "${CHART_DIR}/bootstrap/values.yaml" | \
-  "${YQ}" w - 'global.repoUrl' "${REPO_URL}" | \
-  "${YQ}" w - 'global.targetRevision' "${BRANCH}" | \
-  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" | \
-  "${YQ}" w - 'global.pathSuffix' "cluster/${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
-
+  "${YQ}" eval '.global.repoUrl = env(REPO_URL)' - | \
+  "${YQ}" eval '.global.targetRevision = env(BRANCH)' - | \
+  "${YQ}" eval '.global.targetNamespace = env(NAMESPACE)' - | \
+  "${YQ}" eval '.global.pathSuffix = env(PATH_SUFFIX)' - > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
 
 if [[ -n "${CONFIG}" ]]; then
   echo "${CONFIG}" | yq eval '.[]."argocd-config".branch = "main" | .[].payload.branch = "main" | del(.bootstrap.payload)' - > config.yaml
