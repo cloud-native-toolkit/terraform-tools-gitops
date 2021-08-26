@@ -109,3 +109,8 @@ output "server_name" {
   value = var.server_name
   depends_on = [null_resource.initialize_gitops]
 }
+
+output "sealed_secrets_cert" {
+  description = "The certificate used to encrypt sealed secrets"
+  value = data.local_file.cert_file.content
+}

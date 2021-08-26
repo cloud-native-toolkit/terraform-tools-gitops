@@ -1,10 +1,12 @@
 
 locals {
+  bin_dir = module.setup_clis.bin_dir
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
+  cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
   gitops_config = {
     boostrap = {
       argocd-config = {
-        project = "bootstrap"
+        project = "0-bootstrap"
         repo = module.gitops-repo.repo
         url = module.gitops-repo.url
         path = "argocd/0-bootstrap"
@@ -58,6 +60,10 @@ locals {
   }]
 }
 
+module setup_clis {
+  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
+}
+
 module "gitops-repo" {
   source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.3.0"
 
@@ -77,6 +83,26 @@ resource null_resource initialize_gitops {
     environment = {
       TOKEN = module.gitops-repo.token
       CONFIG = yamlencode(local.gitops_config)
+      CERT = var.sealed_secrets_cert
+      BIN_DIR = local.bin_dir
     }
   }
+}
+
+resource null_resource read_cert {
+  depends_on = [null_resource.initialize_gitops]
+
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/read-cert.sh '${module.gitops-repo.repo}' '${local.cert_file}'"
+
+    environment = {
+      TOKEN = module.gitops-repo.token
+    }
+  }
+}
+
+data local_file cert_file {
+  depends_on = [null_resource.read_cert]
+
+  filename = local.cert_file
 }

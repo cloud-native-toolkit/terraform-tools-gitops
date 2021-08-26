@@ -5,10 +5,9 @@ set -e
 SCRIPT_DIR=$(cd $(dirname "$0"); pwd -P)
 CONFIG_DIR=$(cd "${SCRIPT_DIR}/../config"; pwd -P)
 TEMPLATE_DIR=$(cd "${SCRIPT_DIR}/../template"; pwd -P)
-BIN_DIR=$(cd "${SCRIPT_DIR}/../bin"; pwd -P)
 CHART_DIR=$(cd "${SCRIPT_DIR}/../chart"; pwd -P)
 
-YQ=$(command -v yq || command -v "${BIN_DIR}/yq")
+YQ=$(command -v "${BIN_DIR}/yq4")
 
 REPO="$1"
 NAMESPACE="$2"
@@ -46,7 +45,11 @@ cat "${CHART_DIR}/bootstrap/values.yaml" | \
 
 
 if [[ -n "${CONFIG}" ]]; then
-  echo "${CONFIG}" > config.yaml
+  echo "${CONFIG}" | yq eval '.[]."argocd-config".branch = "main" | .[].payload.branch = "main" | del(.bootstrap.payload)' - > config.yaml
+fi
+
+if [[ -n "${CERT}" ]]; then
+  echo "${CERT}" > kubeseal_cert.pem
 fi
 
 git add .
