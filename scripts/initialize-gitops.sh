@@ -44,7 +44,7 @@ cat "${CHART_DIR}/bootstrap/values.yaml" | \
   "${YQ}" eval '.global.pathSuffix = env(PATH_SUFFIX)' - > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
 
 if [[ -n "${CONFIG}" ]]; then
-  echo "${CONFIG}" | yq eval '.[]."argocd-config".branch = "main" | .[].payload.branch = "main" | del(.bootstrap.payload)' - > config.yaml
+  echo "${CONFIG}" | ${YQ} eval '.[]."argocd-config".branch = "main" | .[].payload.branch = "main" | del(.bootstrap.payload)' - > config.yaml
 fi
 
 if [[ -n "${CERT}" ]]; then
