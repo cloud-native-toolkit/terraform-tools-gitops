@@ -5,18 +5,18 @@ set -e
 SCRIPT_DIR=$(cd $(dirname "$0"); pwd -P)
 CONFIG_DIR=$(cd "${SCRIPT_DIR}/../config"; pwd -P)
 TEMPLATE_DIR=$(cd "${SCRIPT_DIR}/../template"; pwd -P)
-BIN_DIR=$(cd "${SCRIPT_DIR}/../bin"; pwd -P)
 CHART_DIR=$(cd "${SCRIPT_DIR}/../chart"; pwd -P)
 
-YQ=$(command -v yq || command -v "${BIN_DIR}/yq")
+YQ=$(command -v "${BIN_DIR}/yq4")
 
 REPO="$1"
-NAMESPACE="$2"
-SERVER_NAME="$3"
+export NAMESPACE="$2"
+export SERVER_NAME="$3"
 BANNER_LABEL="$4"
 BANNER_COLOR="$5"
 
-REPO_URL="https://${REPO}"
+export PATH_SUFFIX="cluster/${SERVER_NAME}"
+export REPO_URL="https://${REPO}"
 
 mkdir -p .tmpgitops
 
@@ -27,7 +27,7 @@ git clone "https://${TOKEN}@${REPO}" .tmpgitops
 
 cd .tmpgitops || exit 1
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
+export BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 cp -R "${TEMPLATE_DIR}"/* .
 
@@ -35,18 +35,20 @@ mkdir -p "argocd/0-bootstrap/cluster/${SERVER_NAME}"
 
 cp -R "${CHART_DIR}/bootstrap" "argocd/0-bootstrap/cluster/${SERVER_NAME}"
 
-cat "${CHART_DIR}/bootstrap/Chart.yaml" | \
-  "${YQ}" w - 'name' "${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml"
+"${YQ}" eval '.name = env(SERVER_NAME)' "${CHART_DIR}/bootstrap/Chart.yaml" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml"
 
 cat "${CHART_DIR}/bootstrap/values.yaml" | \
-  "${YQ}" w - 'global.repoUrl' "${REPO_URL}" | \
-  "${YQ}" w - 'global.targetRevision' "${BRANCH}" | \
-  "${YQ}" w - 'global.targetNamespace' "${NAMESPACE}" | \
-  "${YQ}" w - 'global.pathSuffix' "cluster/${SERVER_NAME}" > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
-
+  "${YQ}" eval '.global.repoUrl = env(REPO_URL)' - | \
+  "${YQ}" eval '.global.targetRevision = env(BRANCH)' - | \
+  "${YQ}" eval '.global.targetNamespace = env(NAMESPACE)' - | \
+  "${YQ}" eval '.global.pathSuffix = env(PATH_SUFFIX)' - > "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
 
 if [[ -n "${CONFIG}" ]]; then
-  echo "${CONFIG}" > config.yaml
+  echo "${CONFIG}" | ${YQ} eval '.[]."argocd-config".branch = "main" | .[].payload.branch = "main" | del(.bootstrap.payload)' - > config.yaml
+fi
+
+if [[ -n "${CERT}" ]]; then
+  echo "${CERT}" > kubeseal_cert.pem
 fi
 
 git add .

@@ -69,3 +69,9 @@ variable "server_name" {
   description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"
   default     = "default"
 }
+
+variable "sealed_secrets_cert" {
+  type        = string
+  description = "The certificate/public key used to encrypt the sealed secrets"
+  default     = ""
+}
