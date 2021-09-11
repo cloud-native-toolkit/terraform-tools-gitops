@@ -12,8 +12,6 @@ YQ=$(command -v "${BIN_DIR}/yq4")
 REPO="$1"
 export NAMESPACE="$2"
 export SERVER_NAME="$3"
-BANNER_LABEL="$4"
-BANNER_COLOR="$5"
 
 export PATH_SUFFIX="cluster/${SERVER_NAME}"
 export REPO_URL="https://${REPO}"
