@@ -52,18 +52,6 @@ variable "gitops_namespace" {
   default     = "openshift-gitops"
 }
 
-variable "banner_label" {
-  type        = string
-  description = "The label for the cluster"
-  default     = "cluster"
-}
-
-variable "banner_color" {
-  type        = string
-  description = "The color for the cluster"
-  default     = "purple"
-}
-
 variable "server_name" {
   type        = string
   description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"

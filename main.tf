@@ -78,7 +78,7 @@ module "gitops-repo" {
 resource null_resource initialize_gitops {
 
   provisioner "local-exec" {
-    command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}' '${var.banner_label}' '${var.banner_color}'"
+    command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
 
     environment = {
       TOKEN = module.gitops-repo.token
