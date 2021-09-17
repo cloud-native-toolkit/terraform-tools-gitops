@@ -73,6 +73,8 @@ module "gitops-repo" {
   repo  = var.repo
   token = var.token
   branch = var.branch
+  public = var.public
+  provision = var.provision
 }
 
 resource null_resource initialize_gitops {
