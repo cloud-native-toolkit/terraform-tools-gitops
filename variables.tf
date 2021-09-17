@@ -30,6 +30,12 @@ variable "provision" {
   default     = true
 }
 
+variable "initialize" {
+  type        = bool
+  description = "Flag indicating that the git repo should be initialized. If `false` then the repo is expected to already have been initialized"
+  default     = false
+}
+
 variable "username" {
   type        = string
   description = "The username of the user with access to the repository"
