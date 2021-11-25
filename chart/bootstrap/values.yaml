@@ -9,6 +9,10 @@ global:
 infrastructure:
   project: 1-infrastructure
 
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+
   applicationTargets:
     - applications:
       - name: 1-infrastructure
