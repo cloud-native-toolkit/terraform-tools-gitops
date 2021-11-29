@@ -84,7 +84,7 @@ resource null_resource initialize_gitops {
     command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
 
     environment = {
-      TOKEN = module.gitops-repo.token
+      TOKEN = nonsensitive(module.gitops-repo.token)
       CONFIG = yamlencode(local.gitops_config)
       CERT = var.sealed_secrets_cert
       BIN_DIR = local.bin_dir
@@ -99,7 +99,7 @@ resource null_resource read_cert {
     command = "${path.module}/scripts/read-cert.sh '${module.gitops-repo.repo}' '${local.cert_file}'"
 
     environment = {
-      TOKEN = module.gitops-repo.token
+      TOKEN = nonsensitive(module.gitops-repo.token)
     }
   }
 }

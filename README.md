@@ -10,7 +10,7 @@ The module depends on the following software components:
 
 ### Command-line tools
 
-- terraform - v12
+- terraform >= v0.15
 - git
 
 ### Terraform providers
