@@ -14,7 +14,8 @@ infrastructure:
       kind: Namespace
     - group: storage.k8s.io
       kind: StorageClass
-
+    - group: security.openshift.io
+      kind: SecurityContextConstraint
   applicationTargets:
     - applications:
       - name: 1-infrastructure
