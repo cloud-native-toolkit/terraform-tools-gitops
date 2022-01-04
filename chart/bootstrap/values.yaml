@@ -16,6 +16,10 @@ infrastructure:
       kind: StorageClass
     - group: security.openshift.io
       kind: SecurityContextConstraint
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
   applicationTargets:
     - applications:
       - name: 1-infrastructure
