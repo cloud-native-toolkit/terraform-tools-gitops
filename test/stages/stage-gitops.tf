@@ -8,7 +8,7 @@ module "gitops" {
   token = var.git_token
   username = var.git_username
   gitops_namespace = var.gitops_namespace
-  sealed_secrets_cert = module.cert.cert
+  sealed_secret_cert = module.cert.cert
 }
 
 module setup_clis {
