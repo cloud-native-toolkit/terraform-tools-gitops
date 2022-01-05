@@ -7,5 +7,15 @@ tags:
     - gitops
 versions:
 - platforms: []
-  dependencies: []
-  variables: []
+  dependencies:
+    - id: cert
+      optional: true
+      refs:
+        - source: https://github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
+          version: ">= 1.0.0"
+  variables:
+    - name: sealed_secret_cert
+      moduleRef:
+        id: cert
+        output: cert
+
