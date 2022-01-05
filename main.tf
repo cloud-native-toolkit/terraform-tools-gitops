@@ -86,7 +86,7 @@ resource null_resource initialize_gitops {
     environment = {
       TOKEN = nonsensitive(module.gitops-repo.token)
       CONFIG = yamlencode(local.gitops_config)
-      CERT = var.sealed_secret_cert
+      CERT = var.sealed_secrets_cert
       BIN_DIR = local.bin_dir
     }
   }

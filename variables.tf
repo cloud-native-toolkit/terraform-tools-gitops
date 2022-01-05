@@ -64,7 +64,7 @@ variable "server_name" {
   default     = "default"
 }
 
-variable "sealed_secret_cert" {
+variable "sealed_secrets_cert" {
   type        = string
   description = "The certificate/public key used to encrypt the sealed secrets"
   default     = ""
