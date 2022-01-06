@@ -11,7 +11,7 @@ versions:
     - id: cert
       optional: true
       refs:
-        - source: https://github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
+        - source: github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
           version: ">= 1.0.0"
   variables:
     - name: sealed_secret_cert
