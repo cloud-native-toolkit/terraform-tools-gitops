@@ -5,6 +5,7 @@ global:
   destinations:
     - targetNamespace: "*"
   pathSuffix: ""
+  prefix: ""
 
 infrastructure:
   project: 1-infrastructure
