@@ -14,7 +14,7 @@ versions:
         - source: github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
           version: ">= 1.0.0"
   variables:
-    - name: sealed_secret_cert
+    - name: sealed_secrets_cert
       moduleRef:
         id: cert
         output: cert
