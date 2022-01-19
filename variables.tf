@@ -44,6 +44,7 @@ variable "username" {
 variable "token" {
   type        = string
   description = "The personal access token used to access the repository"
+  sensitive   = true
 }
 
 variable "public" {

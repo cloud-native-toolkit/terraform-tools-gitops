@@ -65,7 +65,7 @@ module setup_clis {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.3.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.4.0"
 
   host  = var.host
   type  = var.type
