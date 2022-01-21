@@ -20,11 +20,13 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Build catalog
-        uses: cloud-native-toolkit/action-module-catalog@v1
+        uses: cloud-native-toolkit/action-module-metadata-create@v1
         with:
           tagName: ${{ github.event.release.tag_name }}
           distDir: ${{ env.DIST_DIR }}
           publishBranch: ${{ env.PUBLISH_BRANCH }}
+          strict: false
+          validate: true
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
