@@ -57,7 +57,7 @@ versions:
         type: string
         description: |-
           The personal access token used to access the repository
-            sensitive   = true
+        sensitive   = true
       - name: public
         type: bool
         description: Flag indicating that the repo should be public or private
