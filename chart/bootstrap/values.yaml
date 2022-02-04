@@ -25,6 +25,8 @@ infrastructure:
       kind: ClusterRoleBinding
     - group: apiextensions.k8s.io
       kind: CustomResourceDefinition
+    - group: console.openshift.io
+      kind: ConsoleNotification
   applicationTargets:
     - applications:
       - name: 1-infrastructure
