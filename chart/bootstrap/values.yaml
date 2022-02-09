@@ -27,6 +27,10 @@ infrastructure:
       kind: CustomResourceDefinition
     - group: console.openshift.io
       kind: ConsoleNotification
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
   applicationTargets:
     - applications:
       - name: 1-infrastructure
