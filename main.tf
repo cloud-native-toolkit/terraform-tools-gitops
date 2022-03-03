@@ -92,20 +92,14 @@ resource null_resource initialize_gitops {
   }
 }
 
-resource null_resource read_cert {
+data external cert {
   depends_on = [null_resource.initialize_gitops]
 
-  provisioner "local-exec" {
-    command = "${path.module}/scripts/read-cert.sh '${module.gitops-repo.repo}' '${local.cert_file}'"
+  program = ["bash", "${path.module}/scripts/read-cert.sh"]
 
-    environment = {
-      TOKEN = nonsensitive(module.gitops-repo.token)
-    }
+  query = {
+    bin_dir = module.setup_clis.bin_dir
+    repo = module.gitops-repo.repo
+    token = module.gitops-repo.token
   }
-}
-
-data local_file cert_file {
-  depends_on = [null_resource.read_cert]
-
-  filename = local.cert_file
 }
