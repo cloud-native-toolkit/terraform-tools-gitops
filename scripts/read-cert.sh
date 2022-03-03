@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
-REPO="$1"
-CERT_FILE="$2"
+INPUT=$(tee)
 
-CERT_DIR=$(dirname "${CERT_FILE}")
-mkdir -p "${CERT_DIR}"
+BIN_DIR=$(echo "${INPUT}" | grep "bin_dir" | sed -E 's/.*"bin_dir": ?"([^"]*)".*/\1/g')
+REPO=$(echo "${INPUT}" | grep "repo" | sed -E 's/.*"repo": ?"([^"]*)".*/\1/g')
+TOKEN=$(echo "${INPUT}" | grep "token" | sed -E 's/.*"token": ?"([^"]*)".*/\1/g')
 
 mkdir -p .tmpgitopscert
 
-git clone "https://${TOKEN}@${REPO}" .tmpgitopscert
+git clone "https://${TOKEN}@${REPO}" .tmpgitopscert 1> /dev/null 2> /dev/null
 
 cd .tmpgitopscert || exit 1
 
 if [[ -f kubeseal_cert.pem ]]; then
-  cat kubeseal_cert.pem > "${CERT_FILE}"
+  echo "{}" | ${BIN_DIR}/jq --rawfile CERT kubeseal_cert.pem '{"cert": $CERT}'
 else
-  touch "${CERT_FILE}"
+  echo '{"cert": ""}'
 fi
 
 cd ..

@@ -112,5 +112,5 @@ output "server_name" {
 
 output "sealed_secrets_cert" {
   description = "The certificate used to encrypt sealed secrets"
-  value = data.local_file.cert_file.content
+  value = data.external.cert.result.cert
 }
