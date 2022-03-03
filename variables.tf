@@ -70,3 +70,9 @@ variable "sealed_secrets_cert" {
   description = "The certificate/public key used to encrypt the sealed secrets"
   default     = ""
 }
+
+variable "strict" {
+  type        = bool
+  description = "Flag indicating that an error should be thrown if the repo already exists"
+  default     = false
+}
