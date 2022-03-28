@@ -1,4 +1,5 @@
 name: gitops-repo
+alias: gitops_repo
 type: terraform
 description: Module to provision and set up a GitOps repository
 tags:
