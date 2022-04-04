@@ -25,6 +25,11 @@ git clone "https://${TOKEN}@${REPO}" .tmpgitops
 
 cd .tmpgitops || exit 1
 
+if [[ -f config.yaml ]]; then
+  echo "Repository already initialized. Nothing to do"
+  exit 0
+fi
+
 export BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 cp -R "${TEMPLATE_DIR}"/* .
