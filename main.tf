@@ -65,7 +65,7 @@ module setup_clis {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.6.1"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.6.2"
 
   host  = var.host
   type  = var.type
@@ -78,8 +78,6 @@ module "gitops-repo" {
 }
 
 resource null_resource initialize_gitops {
-  count = var.provision || var.initialize ? 1 : 0
-
   provisioner "local-exec" {
     command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
 
