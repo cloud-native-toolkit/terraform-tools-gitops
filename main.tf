@@ -61,11 +61,12 @@ locals {
 }
 
 module setup_clis {
-  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
+  source = "cloud-native-toolkit/clis/util"
+  version = "1.9.5"
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.6.2"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.6.3"
 
   host  = var.host
   type  = var.type

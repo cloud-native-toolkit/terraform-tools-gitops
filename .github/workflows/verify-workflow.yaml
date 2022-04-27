@@ -1,0 +1,75 @@
+name: Verify
+
+# Controls when the action will run.
+on:
+  workflow_call:
+    secrets:
+      IBMCLOUD_API_KEY:
+        required: true
+      GIT_ADMIN_USERNAME:
+        required: true
+      GIT_ADMIN_TOKEN:
+        required: true
+      GIT_ORG:
+        required: false
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    container: quay.io/cloudnativetoolkit/terraform:v1.1
+
+    strategy:
+      matrix:
+        testcase:
+          - ocp4_latest
+      fail-fast: false
+      max-parallel: 1
+
+    env:
+      HOME: /home/devops
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - id: variables
+        name: Set up variables
+        env:
+          GIT_ORG: ${{ secrets.GIT_ORG }}
+        shell: bash
+        run: |
+          repo=$(echo ${GITHUB_REPOSITORY} | sed -E "s~.*/[^-]+-(.*)~\1~g")
+          echo "Repo: $repo"
+          echo "::set-output name=repo::$repo"
+
+          org="${GIT_ORG:-cloud-native-toolkit-test}"
+          echo "Org: $org"
+          echo "::set-output name=org::$org"
+
+      - name: Verify deploy on ${{ matrix.testcase }}
+        uses: cloud-native-toolkit/action-module-verify-deploy@main
+        with:
+          clusterId: ${{ matrix.testcase }}
+          validateDeployScript: .github/scripts/validate-deploy.sh
+        env:
+          TF_VAR_git_username: ${{ secrets.GIT_ADMIN_USERNAME }}
+          TF_VAR_git_token: ${{ secrets.GIT_ADMIN_TOKEN }}
+          TF_VAR_git_org: ${{ steps.variables.outputs.org }}
+          TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
+          TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
+          IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
+
+      - name: Verify destroy on ${{ matrix.testcase }}
+        uses: cloud-native-toolkit/action-module-verify-destroy@main
+        if: ${{ always() }}
+        with:
+          clusterId: ${{ matrix.testcase }}
+        env:
+          TF_VAR_git_username: ${{ secrets.GIT_ADMIN_USERNAME }}
+          TF_VAR_git_token: ${{ secrets.GIT_ADMIN_TOKEN }}
+          TF_VAR_git_org: ${{ steps.variables.outputs.org }}
+          TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
+          TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
+          IBMCLOUD_API_KEY: ${{ secrets.IBMCLOUD_API_KEY }}
