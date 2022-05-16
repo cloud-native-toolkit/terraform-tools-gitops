@@ -1,6 +1,7 @@
 
 locals {
   bin_dir = module.setup_clis.bin_dir
+  git_org = var.org != null && var.org != "" ? var.org : var.username
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
   cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
   gitops_config = {
@@ -70,7 +71,7 @@ module "gitops-repo" {
 
   host  = var.host
   type  = var.type
-  org   = var.org
+  org   = local.git_org
   repo  = var.repo
   token = var.token
   branch = var.branch
