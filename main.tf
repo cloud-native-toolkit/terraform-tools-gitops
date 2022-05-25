@@ -1,7 +1,6 @@
 
 locals {
   bin_dir = module.setup_clis.bin_dir
-  git_org = var.org != null && var.org != "" ? var.org : var.username
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
   cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
   gitops_config = {
@@ -59,6 +58,14 @@ locals {
     username = var.username
     token = var.token
   }]
+
+  git_default = var.host != "" && var.username != "" && var.token != ""
+  tmp_org = local.git_default ? var.org : var.gitea_org
+
+  host = local.git_default ? var.host : var.gitea_host
+  org = local.tmp_org != "" ? local.tmp_org : local.username
+  username = local.git_default ? var.username : var.gitea_username
+  token = local.git_default ? var.token : var.gitea_token
 }
 
 module setup_clis {
@@ -67,14 +74,13 @@ module setup_clis {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v1.6.3"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.0.0"
 
-  host  = var.host
-  type  = var.type
-  org   = local.git_org
+  host  = local.host
+  org   = local.org
   repo  = var.repo
-  token = var.token
-  branch = var.branch
+  username = local.username
+  token = local.token
   public = var.public
   strict = var.strict
 }

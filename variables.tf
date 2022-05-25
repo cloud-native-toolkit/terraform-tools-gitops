@@ -1,16 +1,57 @@
 variable "host" {
   type        = string
   description = "The host for the git repository."
+  default     = ""
 }
 
 variable "type" {
   type        = string
-  description = "The type of the hosted git repository (github or gitlab)."
+  description = "[Deprecated] The type of the hosted git repository."
+  default     = ""
 }
 
 variable "org" {
   type        = string
   description = "The org/group where the git repository exists/will be provisioned."
+  default     = ""
+}
+
+variable "username" {
+  type        = string
+  description = "The username of the user with access to the repository"
+  default     = ""
+}
+
+variable "token" {
+  type        = string
+  description = "The personal access token used to access the repository"
+  sensitive   = true
+  default     = ""
+}
+
+variable "gitea_host" {
+  type        = string
+  description = "The host for the git repository."
+  default     = ""
+}
+
+variable "gitea_org" {
+  type        = string
+  description = "The org/group where the git repository exists/will be provisioned."
+  default     = ""
+}
+
+variable "gitea_username" {
+  type        = string
+  description = "The username of the user with access to the repository"
+  default     = ""
+}
+
+variable "gitea_token" {
+  type        = string
+  description = "The personal access token used to access the repository"
+  sensitive   = true
+  default     = ""
 }
 
 variable "repo" {
@@ -22,17 +63,6 @@ variable "branch" {
   type        = string
   description = "The name of the branch that will be used. If the repo already exists (provision=false) then it is assumed this branch already exists as well"
   default     = "main"
-}
-
-variable "username" {
-  type        = string
-  description = "The username of the user with access to the repository"
-}
-
-variable "token" {
-  type        = string
-  description = "The personal access token used to access the repository"
-  sensitive   = true
 }
 
 variable "public" {

@@ -12,7 +12,7 @@ output "config_repo_url" {
 }
 
 output "config_username" {
-  value       = var.username
+  value       = module.gitops-repo.username
   description = "The username for the config repo"
   depends_on = [null_resource.initialize_gitops]
 }

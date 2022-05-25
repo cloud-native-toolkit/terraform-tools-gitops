@@ -2,7 +2,6 @@ module "gitops" {
   source = "./module"
 
   host = var.git_host
-  type = var.git_type
   org  = ""
   repo = var.git_repo
   token = var.git_token
