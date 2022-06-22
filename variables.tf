@@ -16,6 +16,12 @@ variable "org" {
   default     = ""
 }
 
+variable "project" {
+  type        = string
+  description = "The project that will be used for the git repo. (Primarily used for Azure DevOps repos)"
+  default     = ""
+}
+
 variable "username" {
   type        = string
   description = "The username of the user with access to the repository"

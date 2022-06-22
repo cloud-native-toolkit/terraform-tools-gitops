@@ -4,10 +4,12 @@ module "gitops" {
   host = var.git_host
   org  = ""
   repo = var.git_repo
-  token = var.git_token
   username = var.git_username
+  token = var.git_token
+  project = var.git_project
   gitops_namespace = var.gitops_namespace
   sealed_secrets_cert = module.cert.cert
+  strict = true
 }
 
 module setup_clis {
@@ -17,6 +19,10 @@ module setup_clis {
 resource null_resource gitops_output {
   provisioner "local-exec" {
     command = "echo -n '${module.gitops.config_repo}' > git_repo"
+  }
+
+  provisioner "local-exec" {
+    command = "echo -n '${module.gitops.config_username}' > git_username"
   }
 
   provisioner "local-exec" {

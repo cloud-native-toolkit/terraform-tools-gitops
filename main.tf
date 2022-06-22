@@ -1,5 +1,6 @@
 
 locals {
+  tmp_dir = "${path.cwd}/.tmp/gitops-repo"
   bin_dir = module.setup_clis.bin_dir
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
   cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
@@ -74,11 +75,12 @@ module setup_clis {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.0.0"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.0"
 
   host  = local.host
   org   = local.org
   repo  = var.repo
+  project = var.project
   username = local.username
   token = local.token
   public = var.public
@@ -90,10 +92,12 @@ resource null_resource initialize_gitops {
     command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
 
     environment = {
+      USERNAME = module.gitops-repo.username
       TOKEN = nonsensitive(module.gitops-repo.token)
       CONFIG = yamlencode(local.gitops_config)
       CERT = var.sealed_secrets_cert
       BIN_DIR = local.bin_dir
+      TMP_DIR = local.tmp_dir
     }
   }
 }
