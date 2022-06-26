@@ -29,7 +29,7 @@ mkdir -p "${REPO_DIR}"
 
 trap "cd ${START_DIR} && rm -rf ${REPO_DIR}" EXIT
 
-git clone "https://${USERNAME}${TOKEN}@${REPO}" "${REPO_DIR}" 1> /dev/null 2> /dev/null
+git clone "https://${USERNAME}:${TOKEN}@${REPO}" "${REPO_DIR}" 1> /dev/null 2> /dev/null
 
 cd "${REPO_DIR}" || exit 1
 

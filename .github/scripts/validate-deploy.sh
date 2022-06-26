@@ -3,6 +3,7 @@
 GIT_REPO=$(cat git_repo)
 GIT_USERNAME=$(cat git_username)
 GIT_TOKEN=$(cat git_token)
+CERT=$(cat sealed_secrets_cert)
 BIN_DIR=$(cat .bindir)
 
 SERVER_NAME="default"
@@ -39,6 +40,19 @@ cat argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml
 VALUES_PATH_SUFFIX=$(yq4 eval '.global.pathSuffix' "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml")
 if [[ "${VALUES_PATH_SUFFIX}" != "cluster/${SERVER_NAME}" ]]; then
   echo "global.pathSuffix value in values.yaml does not match expected: ${VALUES_PATH_SUFFIX}"
+  exit 1
+fi
+
+REPO_CERT=$(cat kubeseal_cert.pem)
+
+if [[ "${REPO_CERT}" != "${CERT}" ]]; then
+  echo "Certs don't match!!"
+  echo ""
+  echo "*** Repo cert"
+  echo "${REPO_CERT}"
+  echo ""
+  echo "*** Module cert"
+  echo "${CERT}"
   exit 1
 fi
 
