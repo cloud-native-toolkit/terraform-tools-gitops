@@ -48,3 +48,5 @@ versions:
       important: true
     - name: token
       important: true
+    - name: project
+      important: true
