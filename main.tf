@@ -109,7 +109,9 @@ data external cert {
 
   query = {
     bin_dir = module.setup_clis.bin_dir
+    tmp_dir = local.tmp_dir
     repo = module.gitops-repo.repo
+    username = module.gitops-repo.username
     token = module.gitops-repo.token
   }
 }
