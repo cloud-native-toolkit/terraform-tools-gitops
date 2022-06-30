@@ -1,6 +1,6 @@
 variable "host" {
   type        = string
-  description = "The host for the git repository."
+  description = "The host for the git repository. The git host used can be a GitHub, GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If the host is null assumes in-cluster Gitea instance will be used."
   default     = ""
 }
 
@@ -12,7 +12,7 @@ variable "type" {
 
 variable "org" {
   type        = string
-  description = "The org/group where the git repository exists/will be provisioned."
+  description = "The org/group where the git repository exists/will be provisioned. If the value is left blank then the username org will be used."
   default     = ""
 }
 
@@ -37,19 +37,19 @@ variable "token" {
 
 variable "gitea_host" {
   type        = string
-  description = "The host for the git repository."
+  description = "The host for the default gitea repository."
   default     = ""
 }
 
 variable "gitea_org" {
   type        = string
-  description = "The org/group where the git repository exists/will be provisioned."
+  description = "The org/group for the default gitea repository. If not provided, the value will default to the username org"
   default     = ""
 }
 
 variable "gitea_username" {
   type        = string
-  description = "The username of the user with access to the repository"
+  description = "The username of the default gitea repository"
   default     = ""
 }
 
