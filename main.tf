@@ -60,13 +60,13 @@ locals {
     token = var.token
   }]
 
-  git_default = var.host != "" && var.username != "" && var.token != ""
-  tmp_org = local.git_default ? var.org : var.gitea_org
+  git_default = var.host == "" || var.username == "" || var.token == ""
+  tmp_org = local.git_default ? var.gitea_org : var.org
 
-  host = local.git_default ? var.host : var.gitea_host
+  host = local.git_default ? var.gitea_host : var.host
   org = local.tmp_org != "" ? local.tmp_org : local.username
-  username = local.git_default ? var.username : var.gitea_username
-  token = local.git_default ? var.token : var.gitea_token
+  username = local.git_default ? var.gitea_username : var.username
+  token = local.git_default ? var.gitea_token : var.token
 }
 
 module setup_clis {
