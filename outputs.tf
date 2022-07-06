@@ -1,4 +1,28 @@
 
+output "config_host" {
+  value = module.gitops-repo.host
+  description = "The host name of the bootstrap git repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "config_org" {
+  value = module.gitops-repo.org
+  description = "The org name of the bootstrap git repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "config_name" {
+  value = module.gitops-repo.name
+  description = "The repo name of the bootstrap git repo"
+  depends_on = [null_resource.initialize_gitops]
+}
+
+output "config_project" {
+  value = module.gitops-repo.project
+  description = "The project name of the bootstrap git repo (for Azure DevOps)"
+  depends_on = [null_resource.initialize_gitops]
+}
+
 output "config_repo" {
   value = module.gitops-repo.repo
   description = "The repo that contains the argocd configuration"
