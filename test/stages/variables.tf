@@ -1,4 +1,9 @@
 
+variable "ibmcloud_api_key" {
+  type        = string
+  description = "The api key for IBM Cloud access"
+}
+
 variable "git_token" {
   type        = string
   description = "Git token"
@@ -11,7 +16,6 @@ variable "git_username" {
 
 variable "git_host" {
   type        = string
-  default     = "github.com"
 }
 
 variable "git_org" {
@@ -28,4 +32,19 @@ variable "gitops_namespace" {
 
 variable "git_project" {
   default = ""
+}
+
+variable "server_url" {
+}
+
+variable "ingress_subdomain" {
+  default = ""
+}
+
+variable "login_token" {
+  default = ""
+}
+
+variable "namespace" {
+  default = "gitea"
 }
