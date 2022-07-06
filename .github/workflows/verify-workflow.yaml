@@ -27,7 +27,7 @@ jobs:
           - us-south.git.cloud.ibm.com
           - bitbucket.org
           - dev.azure.com
-          - ""
+          - gitea
       fail-fast: false
 
     env:
@@ -58,13 +58,13 @@ jobs:
           echo "Project: $project"
           echo "::set-output name=project::$project"
           
-          if [[ -z "${{ matrix.testcase }}" ]]; then
-            echo "::set-output name=name::gitea"
+          if [[ "gitea" == "${{ matrix.testcase }}" ]]; then
+            echo "::set-output name=host::"
             echo "::set-output name=username::"
             echo "::set-output name=token::"        
             exit 0
           else
-            echo "::set-output name=name::${{ matrix.testcase }}"            
+            echo "::set-output name=host::${{ matrix.testcase }}"            
           fi
           
           username=$(echo "${GITU_CONFIG}" |  yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .username')
@@ -83,28 +83,28 @@ jobs:
           fi
           echo "::set-output name=token::$token"
 
-      - name: Verify deploy on ${{ steps.variables.outputs.name }}
+      - name: Verify deploy on ${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-deploy@main
         with:
           clusterId: "ibm_ocp49"
           validateDeployScript: .github/scripts/validate-deploy.sh
         env:
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
-          TF_VAR_git_host: ${{ matrix.testcase }}
+          TF_VAR_git_host: ${{ steps.variables.outputs.host }}
           TF_VAR_git_username: ${{ steps.variables.outputs.username }}
           TF_VAR_git_token: ${{ steps.variables.outputs.token }}
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
 
-      - name: Verify destroy on ${{ steps.variables.outputs.name }}
+      - name: Verify destroy on ${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-destroy@main
         if: ${{ always() }}
         with:
           clusterId: "ibm_ocp49"
         env:
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
-          TF_VAR_git_host: ${{ matrix.testcase }}
+          TF_VAR_git_host: ${{ steps.variables.outputs.host }}
           TF_VAR_git_username: ${{ steps.variables.outputs.username }}
           TF_VAR_git_token: ${{ steps.variables.outputs.token }}
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
