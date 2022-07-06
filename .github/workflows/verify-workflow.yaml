@@ -59,9 +59,12 @@ jobs:
           echo "::set-output name=project::$project"
           
           if [[ -z "${{ matrix.testcase }}" ]]; then
+            echo "::set-output name=name::gitea"
             echo "::set-output name=username::"
             echo "::set-output name=token::"        
             exit 0
+          else
+            echo "::set-output name=name::${{ matrix.testcase }}"            
           fi
           
           username=$(echo "${GITU_CONFIG}" |  yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .username')
@@ -80,7 +83,7 @@ jobs:
           fi
           echo "::set-output name=token::$token"
 
-      - name: Verify deploy on ${{ matrix.testcase }}
+      - name: Verify deploy on ${{ steps.variables.outputs.name }}
         uses: cloud-native-toolkit/action-module-verify-deploy@main
         with:
           clusterId: "ibm_ocp49"
@@ -94,7 +97,7 @@ jobs:
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
 
-      - name: Verify destroy on ${{ matrix.testcase }}
+      - name: Verify destroy on ${{ steps.variables.outputs.name }}
         uses: cloud-native-toolkit/action-module-verify-destroy@main
         if: ${{ always() }}
         with:
