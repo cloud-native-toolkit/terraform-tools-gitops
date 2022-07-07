@@ -51,9 +51,9 @@ output "config_token" {
 output "config_paths" {
   description = "The paths in the config repo"
   value = {
-    infrastructure = "argocd/1-infrastructure/active"
-    services       = "argocd/2-services/active"
-    applications   = "argocd/3-applications/active"
+    infrastructure = "argocd/1-infrastructure"
+    services       = "argocd/2-services"
+    applications   = "argocd/3-applications"
   }
   depends_on = [null_resource.initialize_gitops]
 }
@@ -93,7 +93,7 @@ output "application_repo_url" {
 }
 
 output "application_username" {
-  value       = var.username
+  value       = module.gitops-repo.username
   description = "The username for the application repo"
   depends_on = [null_resource.initialize_gitops]
 }

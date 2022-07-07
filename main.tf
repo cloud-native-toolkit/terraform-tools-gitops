@@ -56,8 +56,8 @@ locals {
   git_credentials = [{
     repo = module.gitops-repo.repo
     url = module.gitops-repo.url
-    username = var.username
-    token = var.token
+    username = module.gitops-repo.username
+    token = module.gitops-repo.token
   }]
 
   git_default = var.host == "" || var.username == "" || var.token == ""
