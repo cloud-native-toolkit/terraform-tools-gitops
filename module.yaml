@@ -39,7 +39,7 @@ versions:
     - name: gitea_token
       moduleRef:
         id: gitea
-        output: password
+        output: token
     - name: host
       important: true
     - name: org

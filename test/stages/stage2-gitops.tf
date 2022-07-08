@@ -13,7 +13,7 @@ module "gitops" {
   gitea_host = module.gitea.host
   gitea_org = module.gitea.org
   gitea_username = module.gitea.username
-  gitea_token = module.gitea.password
+  gitea_token = module.gitea.token
 }
 
 module setup_clis {
