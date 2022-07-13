@@ -50,3 +50,5 @@ versions:
       important: true
     - name: project
       important: true
+    - name: debug
+      scope: global

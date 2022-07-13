@@ -75,7 +75,7 @@ module setup_clis {
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.3"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.4"
 
   host  = local.host
   org   = local.org
@@ -85,6 +85,7 @@ module "gitops-repo" {
   token = local.token
   public = var.public
   strict = var.strict
+  debug = var.debug
 }
 
 resource null_resource initialize_gitops {
