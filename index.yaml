@@ -126,6 +126,173 @@ versions:
           Flag indicating that an error should be thrown if the repo already
           exists
         default: false
+    version: v1.20.3
+    outputs:
+      - name: config_host
+        description: The host name of the bootstrap git repo
+      - name: config_org
+        description: The org name of the bootstrap git repo
+      - name: config_name
+        description: The repo name of the bootstrap git repo
+      - name: config_project
+        description: The project name of the bootstrap git repo (for Azure DevOps)
+      - name: config_repo
+        description: The repo that contains the argocd configuration
+      - name: config_repo_url
+        description: The repo that contains the argocd configuration
+      - name: config_username
+        description: The username for the config repo
+      - name: config_token
+        description: The token for the config repo
+        sensitive: true
+      - name: config_paths
+        description: The paths in the config repo
+      - name: config_projects
+        description: The ArgoCD projects for the different layers of the repo
+      - name: bootstrap_path
+        description: The path to the bootstrap configuration
+      - name: bootstrap_branch
+        description: The branch in the gitrepo containing the bootstrap configuration
+      - name: application_repo
+        description: The repo that contains the application configuration
+      - name: application_repo_url
+        description: The repo that contains the application configuration
+      - name: application_username
+        description: The username for the application repo
+      - name: application_token
+        description: The token for the application repo
+        sensitive: true
+      - name: application_paths
+        description: The paths in the application repo
+      - name: gitops_config
+        description: Config information regarding the gitops repo structure
+      - name: git_credentials
+        description: The credentials for the gitops repo(s)
+        sensitive: true
+      - name: server_name
+        description: The name of the cluster that will be configured for gitops
+      - name: sealed_secrets_cert
+        description: The certificate used to encrypt sealed secrets
+  - platforms: []
+    dependencies:
+      - id: cert
+        optional: true
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
+            version: '>= 1.0.0'
+      - id: gitea
+        optional: true
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-tools-gitea
+            version: '>= 0.3.0'
+    variables:
+      - name: host
+        type: string
+        description: >-
+          The host for the git repository. The git host used can be a GitHub,
+          GitHub Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If
+          the host is null assumes in-cluster Gitea instance will be used.
+        default: ''
+        important: true
+      - name: type
+        type: string
+        description: '[Deprecated] The type of the hosted git repository.'
+        default: ''
+      - name: org
+        type: string
+        description: >-
+          The org/group where the git repository exists/will be provisioned. If
+          the value is left blank then the username org will be used.
+        default: ''
+        important: true
+      - name: project
+        type: string
+        description: >-
+          The project that will be used for the git repo. (Primarily used for
+          Azure DevOps repos)
+        default: ''
+        important: true
+      - name: username
+        type: string
+        description: The username of the user with access to the repository
+        default: ''
+        important: true
+      - name: token
+        type: string
+        description: The personal access token used to access the repository
+        sensitive: true
+        default: ''
+        important: true
+      - name: gitea_host
+        type: string
+        description: The host for the default gitea repository.
+        default: ''
+        moduleRef:
+          id: gitea
+          output: host
+      - name: gitea_org
+        type: string
+        description: >-
+          The org/group for the default gitea repository. If not provided, the
+          value will default to the username org
+        default: ''
+        moduleRef:
+          id: gitea
+          output: org
+      - name: gitea_username
+        type: string
+        description: The username of the default gitea repository
+        default: ''
+        moduleRef:
+          id: gitea
+          output: username
+      - name: gitea_token
+        type: string
+        description: The personal access token used to access the repository
+        sensitive: true
+        default: ''
+        moduleRef:
+          id: gitea
+          output: token
+      - name: repo
+        type: string
+        description: >-
+          The short name of the repository (i.e. the part after the org/group
+          name)
+      - name: branch
+        type: string
+        description: >-
+          The name of the branch that will be used. If the repo already exists
+          (provision=false) then it is assumed this branch already exists as
+          well
+        default: main
+      - name: public
+        type: bool
+        description: Flag indicating that the repo should be public or private
+        default: false
+      - name: gitops_namespace
+        type: string
+        description: The namespace where ArgoCD is running in the cluster
+        default: openshift-gitops
+      - name: server_name
+        type: string
+        description: >-
+          The name of the cluster that will be configured via gitops. This is
+          used to separate the config by cluster
+        default: default
+      - name: sealed_secrets_cert
+        type: string
+        description: The certificate/public key used to encrypt the sealed secrets
+        default: ''
+        moduleRef:
+          id: cert
+          output: cert
+      - name: strict
+        type: bool
+        description: >-
+          Flag indicating that an error should be thrown if the repo already
+          exists
+        default: false
     version: v1.20.2
     outputs:
       - name: config_host
