@@ -71,7 +71,7 @@ locals {
 
 module setup_clis {
   source = "cloud-native-toolkit/clis/util"
-  version = "1.16.3"
+  version = "1.16.4"
 }
 
 module "gitops-repo" {
