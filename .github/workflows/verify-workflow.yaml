@@ -46,7 +46,7 @@ jobs:
           GIT_PROJECT: ${{ secrets.GIT_PROJECT }}
         shell: bash
         run: |
-          repo=$(echo "${GITHUB_REPOSITORY}" | sed -E "s~.*/[^-]+-(.*)~\1~g")
+          repo=$(echo "${GITHUB_REPOSITORY}" | sed -E "s~.*/[^-]+-(.*)~\1a~g")
           echo "Repo: $repo"
           echo "::set-output name=repo::$repo"
 

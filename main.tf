@@ -72,10 +72,12 @@ locals {
 module setup_clis {
   source = "cloud-native-toolkit/clis/util"
   version = "1.16.4"
+
+  clis = ["jq", "yq", "gitu"]
 }
 
 module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.4"
+  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.6"
 
   host  = local.host
   org   = local.org
@@ -93,8 +95,8 @@ resource null_resource initialize_gitops {
     command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
 
     environment = {
-      USERNAME = module.gitops-repo.username
-      TOKEN = nonsensitive(module.gitops-repo.token)
+      GIT_USERNAME = module.gitops-repo.username
+      GIT_TOKEN = nonsensitive(module.gitops-repo.token)
       CONFIG = yamlencode(local.gitops_config)
       CERT = var.sealed_secrets_cert
       BIN_DIR = local.bin_dir
