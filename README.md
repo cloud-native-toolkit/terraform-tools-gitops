@@ -1,7 +1,7 @@
 # GitOps repo module
 
 Module that prepares a GitOps repo for use with ArgoCD. If the `provision` flag is `true` then a new git repo will be provisioned. If not, the provided repo name is expected to already exist.
-
+  
 After cloning the git repo, an initial directory structure is set up along with bootstrap configuration to perform the initial setup of ArgoCD.
 
 ## Supported git servers
