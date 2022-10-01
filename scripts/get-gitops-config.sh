@@ -16,7 +16,7 @@ export CA_CERT=$(echo "${INPUT}" | jq -r '.ca_cert | @base64d')
 REPO=$(echo "${INPUT}" | jq -r '.repo')
 TMP_DIR=$(echo "${INPUT}" | jq -r '.tmp_dir')
 
-OUTPUT=$(igc gitops-repo "${REPO}" --tmpDir "${TMP_DIR}" --output json)
+OUTPUT=$(igc gitops-init "${REPO}" --tmpDir "${TMP_DIR}" --output json)
 
 REPO_OUT=$(echo "${OUTPUT}" | jq -r '.repo')
 URL_OUT=$(echo "${OUTPUT}" | jq -r '.url')
