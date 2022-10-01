@@ -6,7 +6,7 @@ locals {
 
   url = data.external.git_config.result.url
   repo = data.external.git_config.result.repo
-  gitops_config_int = tomap(jsondecode(data.external.git_config.result.config))
+  gitops_config_int = jsondecode(data.external.git_config.result.config)
   gitops_config = {
     boostrap = {
       argocd-config = {
