@@ -106,3 +106,15 @@ variable "debug" {
   description = "Flag indicating that debug loggging should be enabled"
   default     = false
 }
+
+variable "ca_cert" {
+  type        = string
+  description = "(optional) The certificate authority certificate for the self-signed cert used by the git server"
+  default     = ""
+}
+
+variable "ca_cert_file" {
+  type        = string
+  description = "(optional) The file containing the certificate authority certificate for the self-signed cert used by the git server"
+  default     = ""
+}

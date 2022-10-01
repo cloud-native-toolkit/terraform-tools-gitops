@@ -1,64 +1,11 @@
 
 locals {
   tmp_dir = "${path.cwd}/.tmp/gitops-repo"
-  bin_dir = module.setup_clis.bin_dir
+  bin_dir = data.clis_check.clis.bin_dir
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
-  cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
-  gitops_config = {
-    boostrap = {
-      argocd-config = {
-        project = "0-bootstrap"
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "argocd/0-bootstrap"
-      }
-    }
-    infrastructure = {
-      argocd-config = {
-        project = "1-infrastructure"
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "argocd/1-infrastructure"
-      }
-      payload = {
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "payload/1-infrastructure"
-      }
-    }
-    services = {
-      argocd-config = {
-        project = "2-services"
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "argocd/2-services"
-      }
-      payload = {
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "payload/2-services"
-      }
-    }
-    applications = {
-      argocd-config = {
-        project = "3-applications"
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "argocd/3-applications"
-      }
-      payload = {
-        repo = module.gitops-repo.repo
-        url = module.gitops-repo.url
-        path = "payload/3-applications"
-      }
-    }
-  }
-  git_credentials = [{
-    repo = module.gitops-repo.repo
-    url = module.gitops-repo.url
-    username = module.gitops-repo.username
-    token = module.gitops-repo.token
-  }]
+
+  gitops_config = jsondecode(data.external.git_config.result.config)
+  git_credentials = jsondecode(data.external.git_config.result.credentials)
 
   git_default = var.host == "" || var.username == "" || var.token == ""
   tmp_org = local.git_default ? var.gitea_org : var.org
@@ -67,54 +14,76 @@ locals {
   org = local.tmp_org != "" ? local.tmp_org : local.username
   username = local.git_default ? var.gitea_username : var.username
   token = local.git_default ? var.gitea_token : var.token
+  branch = var.branch != "" ? var.branch : 'main'
+
+  ca_cert = var.ca_cert_file != "" ? file(var.ca_cert_file) : var.ca_cert
 }
 
-module setup_clis {
-  source = "cloud-native-toolkit/clis/util"
-  version = "1.16.4"
-
-  clis = ["jq", "yq", "gitu"]
+data clis_check clis {
+  clis = ["igc", "jq"]
 }
 
-module "gitops-repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-git-repo.git?ref=v2.1.6"
-
-  host  = local.host
-  org   = local.org
-  repo  = var.repo
-  project = var.project
-  username = local.username
-  token = local.token
-  public = var.public
-  strict = var.strict
-  debug = var.debug
+resource random_string module_id {
+  length = 16
 }
 
 resource null_resource initialize_gitops {
+  triggers = {
+    host = local.host
+    org = local.org
+    project = var.project
+    repo = var.repo
+    username = local.username
+    token = local.token
+    ca_cert = local.ca_cert
+    sealed_secrets_cert = var.sealed_secrets_cert
+    tmp_dir = local.tmp_dir
+    bin_dir = local.bin_dir
+    module_id = random_string.module_id.result
+  }
+
   provisioner "local-exec" {
-    command = "${path.module}/scripts/initialize-gitops.sh '${module.gitops-repo.repo}' '${var.gitops_namespace}' '${var.server_name}'"
+    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --strict='${var.strict}' --debug"
 
     environment = {
-      GIT_USERNAME = module.gitops-repo.username
-      GIT_TOKEN = nonsensitive(module.gitops-repo.token)
-      CONFIG = yamlencode(local.gitops_config)
-      CERT = var.sealed_secrets_cert
-      BIN_DIR = local.bin_dir
-      TMP_DIR = local.tmp_dir
+      GIT_HOST = self.triggers.host
+      GIT_ORG = self.triggers.org
+      GIT_PROJECT = self.triggers.project
+      GIT_USERNAME = self.triggers.username
+      GIT_TOKEN = nonsensitive(self.triggers.token)
+      CA_CERT = self.triggers.ca_cert
+      KUBESEAL_CERT = self.triggers.sealed_secrets_cert
+    }
+  }
+
+  provisioner "local-exec" {
+    when = destroy
+    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --delete --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --debug"
+
+    environment = {
+      GIT_HOST = self.triggers.host
+      GIT_ORG = self.triggers.org
+      GIT_PROJECT = self.triggers.project
+      GIT_USERNAME = self.triggers.username
+      GIT_TOKEN = nonsensitive(self.triggers.token)
+      CA_CERT = self.triggers.ca_cert
+      KUBESEAL_CERT = self.triggers.sealed_secrets_cert
     }
   }
 }
 
-data external cert {
-  depends_on = [null_resource.initialize_gitops]
-
-  program = ["bash", "${path.module}/scripts/read-cert.sh"]
+data external git_config {
+  program = ["bash", "${path.module}/scripts/get-gitops-config.sh"]
 
   query = {
-    bin_dir = module.setup_clis.bin_dir
+    bin_dir = local.bin_dir
+    host = local.host
+    org = local.org
+    project = var.project
+    repo = var.repo
+    username = local.username
+    token = local.token
+    ca_cert = base64encode(local.ca_cert)
     tmp_dir = local.tmp_dir
-    repo = module.gitops-repo.repo
-    username = module.gitops-repo.username
-    token = module.gitops-repo.token
   }
 }
