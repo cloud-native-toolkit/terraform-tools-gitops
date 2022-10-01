@@ -8,6 +8,14 @@ locals {
   repo = data.external.git_config.result.repo
   gitops_config_int = tomap(jsondecode(data.external.git_config.result.config))
   gitops_config = {
+    boostrap = {
+      argocd-config = {
+        project = local.gitops_config_int["bootstrap"]["argocd-config"]["project"]
+        repo = local.gitops_config_int["bootstrap"]["argocd-config"]["repo"]
+        url = local.gitops_config_int["bootstrap"]["argocd-config"]["url"]
+        path = local.gitops_config_int["bootstrap"]["argocd-config"]["path"]
+      }
+    }
     bootstrap = {
       argocd-config = {
         project = local.gitops_config_int["bootstrap"]["argocd-config"]["project"]
