@@ -14,7 +14,7 @@ locals {
   org = local.tmp_org != "" ? local.tmp_org : local.username
   username = local.git_default ? var.gitea_username : var.username
   token = local.git_default ? var.gitea_token : var.token
-  branch = var.branch != "" ? var.branch : 'main'
+  branch = var.branch != "" ? var.branch : "main"
 
   ca_cert = var.ca_cert_file != "" ? file(var.ca_cert_file) : var.ca_cert
 }
