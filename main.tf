@@ -75,6 +75,8 @@ resource null_resource initialize_gitops {
 }
 
 data external git_config {
+  depends_on = [null_resource.initialize_gitops]
+
   program = ["bash", "${path.module}/scripts/get-gitops-config.sh"]
 
   query = {
@@ -87,5 +89,14 @@ data external git_config {
     token = local.token
     ca_cert = base64encode(local.ca_cert)
     tmp_dir = local.tmp_dir
+  }
+}
+
+resource null_resource print_config {
+  provisioner "local-exec" {
+    command = "echo 'Config: ${data.external.git_config.result.config}'"
+  }
+  provisioner "local-exec" {
+    command = "echo 'Credentials: ${data.external.git_config.result.credentials}'"
   }
 }
