@@ -4,6 +4,7 @@ GIT_REPO=$(cat git_repo)
 GIT_USERNAME=$(cat git_username)
 GIT_TOKEN=$(cat git_token)
 CERT=$(cat sealed_secrets_cert)
+GITOPS_CONFIG=$(cat gitops_config | jq '.')
 BIN_DIR=$(cat .bindir)
 
 SERVER_NAME="default"
@@ -43,6 +44,7 @@ if [[ "${VALUES_PATH_SUFFIX}" != "cluster/${SERVER_NAME}" ]]; then
   exit 1
 fi
 
+
 REPO_CERT=$(cat kubeseal_cert.pem)
 
 if [[ "${REPO_CERT}" != "${CERT}" ]]; then
@@ -55,6 +57,9 @@ if [[ "${REPO_CERT}" != "${CERT}" ]]; then
   echo "${CERT}"
   exit 1
 fi
+
+BOOTSTRAP_URL=$(echo "${GITOPS_CONFIG}" | jq -r '.bootstrap."argocd-config".url')
+echo "Bootstrap url: ${BOOTSTRAP_URL}"
 
 cd ..
 rm -rf .testrepo
