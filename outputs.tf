@@ -117,7 +117,7 @@ output "application_paths" {
 
 output "gitops_config" {
   description = "Config information regarding the gitops repo structure"
-  value = local.gitops_config
+  value = local.gitops_config_int
   depends_on = [null_resource.initialize_gitops]
 }
 
