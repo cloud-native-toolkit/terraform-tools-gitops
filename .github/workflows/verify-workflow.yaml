@@ -25,8 +25,8 @@ jobs:
           - github.com
           - github.ibm.com
           - us-south.git.cloud.ibm.com
-          - bitbucket.org
-          - dev.azure.com
+#          - bitbucket.org
+#          - dev.azure.com
           - gitea
       fail-fast: false
 
