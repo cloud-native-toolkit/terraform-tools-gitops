@@ -91,11 +91,9 @@ jobs:
           ca_cert_file=""
           if [[ -n "${ca_cert}" ]]; then
             echo "CA certificate config found"
-            ca_cert_dir="cert"
+            ca_cert_dir="/tmp/cert"
             mkdir -p "${ca_cert_dir}"
             
-            ca_cert_dir=$(cd "${ca_cert_file}"; pwd -P)
-          
             ca_cert_file="${ca_cert_dir}/ca.crt"
             echo "${CA_CERT}" > "${ca_cert_file}"
           fi
