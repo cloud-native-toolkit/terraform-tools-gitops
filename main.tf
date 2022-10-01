@@ -4,6 +4,8 @@ locals {
   bin_dir = data.clis_check.clis.bin_dir
   bootstrap_path = "argocd/0-bootstrap/cluster/${var.server_name}"
 
+  url = data.external.git_config.result.url
+  repo = data.external.git_config.result.repo
   gitops_config = jsondecode(data.external.git_config.result.config)
   git_credentials = jsondecode(data.external.git_config.result.credentials)
 
