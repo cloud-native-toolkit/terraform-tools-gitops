@@ -6,7 +6,56 @@ locals {
 
   url = data.external.git_config.result.url
   repo = data.external.git_config.result.repo
-  gitops_config = jsondecode(data.external.git_config.result.config)
+  gitops_config_int = jsondecode(data.external.git_config.result.config)
+  gitops_config = {
+    bootstrap = {
+      argocd-config = {
+        project = local.gitops_config_int["bootstrap"]["argocd-config"]["project"]
+        repo = local.gitops_config_int["bootstrap"]["argocd-config"]["repo"]
+        url = local.gitops_config_int["bootstrap"]["argocd-config"]["url"]
+        path = local.gitops_config_int["bootstrap"]["argocd-config"]["path"]
+      }
+    }
+    infrastructure = {
+      argocd-config = {
+        project = local.gitops_config_int["infrastructure"]["argocd-config"]["project"]
+        repo = local.gitops_config_int["infrastructure"]["argocd-config"]["repo"]
+        url = local.gitops_config_int["infrastructure"]["argocd-config"]["url"]
+        path = local.gitops_config_int["infrastructure"]["argocd-config"]["path"]
+      }
+      payload = {
+        repo = local.gitops_config_int["infrastructure"]["payload"]["repo"]
+        url = local.gitops_config_int["infrastructure"]["payload"]["url"]
+        path = local.gitops_config_int["infrastructure"]["payload"]["path"]
+      }
+    }
+    services = {
+      argocd-config = {
+        project = local.gitops_config_int["services"]["argocd-config"]["project"]
+        repo = local.gitops_config_int["services"]["argocd-config"]["repo"]
+        url = local.gitops_config_int["services"]["argocd-config"]["url"]
+        path = local.gitops_config_int["services"]["argocd-config"]["path"]
+      }
+      payload = {
+        repo = local.gitops_config_int["services"]["payload"]["repo"]
+        url = local.gitops_config_int["services"]["payload"]["url"]
+        path = local.gitops_config_int["services"]["payload"]["path"]
+      }
+    }
+    applications = {
+      argocd-config = {
+        project = local.gitops_config_int["applications"]["argocd-config"]["project"]
+        repo = local.gitops_config_int["applications"]["argocd-config"]["repo"]
+        url = local.gitops_config_int["applications"]["argocd-config"]["url"]
+        path = local.gitops_config_int["applications"]["argocd-config"]["path"]
+      }
+      payload = {
+        repo = local.gitops_config_int["applications"]["payload"]["repo"]
+        url = local.gitops_config_int["applications"]["payload"]["url"]
+        path = local.gitops_config_int["applications"]["payload"]["path"]
+      }
+    }
+  }
   git_credentials = jsondecode(data.external.git_config.result.credentials)
 
   git_default = var.host == "" || var.username == "" || var.token == ""
