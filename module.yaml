@@ -43,6 +43,10 @@ versions:
       moduleRef:
         id: gitea
         output: token
+    - name: gitea_ca_cert
+      moduleRef:
+        id: gitea
+        output: ca_cert
     - name: host
       important: true
     - name: org

@@ -75,7 +75,8 @@ locals {
   token = local.git_default ? var.gitea_token : var.token
   branch = var.branch != "" ? var.branch : "main"
 
-  ca_cert = var.ca_cert_file != "" ? file(var.ca_cert_file) : var.ca_cert
+  git_ca_cert = var.ca_cert_file != "" ? base64encode(file(var.ca_cert_file)) : var.ca_cert
+  ca_cert = local.git_default ? var.gitea_ca_cert : local.git_ca_cert
 }
 
 data clis_check clis {
@@ -125,7 +126,7 @@ resource null_resource initialize_gitops {
       GIT_PROJECT = self.triggers.project
       GIT_USERNAME = self.triggers.username
       GIT_TOKEN = nonsensitive(self.triggers.token)
-      CA_CERT = self.triggers.ca_cert
+      CA_CERT = self.triggers.ca_cert != "" ? base64decode(self.triggers.ca_cert) : ""
       KUBESEAL_CERT = self.triggers.sealed_secrets_cert
     }
   }
@@ -144,7 +145,7 @@ data external git_config {
     repo = var.repo
     username = local.username
     token = local.token
-    ca_cert = base64encode(local.ca_cert)
+    ca_cert = local.ca_cert
     tmp_dir = local.tmp_dir
   }
 }

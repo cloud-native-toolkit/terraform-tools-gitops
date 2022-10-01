@@ -60,6 +60,12 @@ variable "gitea_token" {
   default     = ""
 }
 
+variable "gitea_ca_cert" {
+  type        = string
+  description = "The base64 encoded ca certificate of the gitea instance"
+  default     = ""
+}
+
 variable "repo" {
   type        = string
   description = "The short name of the repository (i.e. the part after the org/group name)"
