@@ -136,5 +136,5 @@ output "server_name" {
 
 output "sealed_secrets_cert" {
   description = "The certificate used to encrypt sealed secrets"
-  value = local.ca_cert
+  value = var.sealed_secrets_cert
 }

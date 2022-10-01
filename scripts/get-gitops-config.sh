@@ -21,6 +21,6 @@ OUTPUT=$(igc gitops-init "${REPO}" --tmpDir "${TMP_DIR}" --output json)
 REPO_OUT=$(echo "${OUTPUT}" | jq -r '.repo')
 URL_OUT=$(echo "${OUTPUT}" | jq -r '.url')
 GITOPS_CONFIG=$(echo "${OUTPUT}" | jq -c '.gitopsConfig')
-GIT_CREDENTIALS=$(jq -n -c --arg REPO "${REPO}" --arg URL "${URL}" --arg USERNAME "${USERNAME}" --arg TOKEN "${TOKEN}" '[{"repo": $REPO, "url": $URL, "username": $USERNAME, "token": $TOKEN}]')
+GIT_CREDENTIALS=$(jq -n -c --arg REPO "${REPO_OUT}" --arg URL "${URL_OUT}" --arg USERNAME "${GIT_USERNAME}" --arg TOKEN "${GIT_TOKEN}" '[{"repo": $REPO, "url": $URL, "username": $USERNAME, "token": $TOKEN}]')
 
 jq -n --arg REPO "${REPO_OUT}" --arg URL "${URL_OUT}" --arg CONFIG "${GITOPS_CONFIG}" --arg CREDENTIALS "${GIT_CREDENTIALS}" '{"repo": $REPO, "url": $URL, "config": $CONFIG, "credentials": $CREDENTIALS}'
