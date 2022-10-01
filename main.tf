@@ -45,7 +45,7 @@ resource null_resource initialize_gitops {
   }
 
   provisioner "local-exec" {
-    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --strict='${var.strict}' --debug"
+    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --strict='${var.strict}' --output json --debug"
 
     environment = {
       GIT_HOST = self.triggers.host
@@ -60,7 +60,7 @@ resource null_resource initialize_gitops {
 
   provisioner "local-exec" {
     when = destroy
-    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --delete --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --debug"
+    command = "${self.triggers.bin_dir}/igc gitops-init '${self.triggers.repo}' --delete --moduleId '${self.triggers.module_id}' --tmpDir '${self.triggers.tmp_dir}' --output json --debug"
 
     environment = {
       GIT_HOST = self.triggers.host
