@@ -14,6 +14,7 @@ module "gitops" {
   gitea_org = module.gitea.org
   gitea_username = module.gitea.username
   gitea_token = module.gitea.token
+  ca_cert_file = var.ca_cert_file
   debug = true
 }
 
