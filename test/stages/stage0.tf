@@ -10,6 +10,7 @@ terraform {
 }
 
 data clis_check clis {
+  clis = ["yq","jq"]
 }
 
 provider gitops {
