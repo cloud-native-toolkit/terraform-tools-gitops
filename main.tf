@@ -149,12 +149,3 @@ data external git_config {
     tmp_dir = local.tmp_dir
   }
 }
-
-resource null_resource print_config {
-  provisioner "local-exec" {
-    command = "echo 'Config: ${data.external.git_config.result.config}'"
-  }
-  provisioner "local-exec" {
-    command = "echo 'Credentials: ${data.external.git_config.result.credentials}'"
-  }
-}
