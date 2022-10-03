@@ -8,6 +8,9 @@ tags:
     - gitops
 versions:
 - platforms: []
+  providers:
+    - name: clis
+      source: "cloud-native-toolkit/clis"
   dependencies:
     - id: cert
       optional: true
@@ -40,6 +43,10 @@ versions:
       moduleRef:
         id: gitea
         output: token
+    - name: gitea_ca_cert
+      moduleRef:
+        id: gitea
+        output: ca_cert
     - name: host
       important: true
     - name: org

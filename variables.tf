@@ -60,6 +60,12 @@ variable "gitea_token" {
   default     = ""
 }
 
+variable "gitea_ca_cert" {
+  type        = string
+  description = "The base64 encoded ca certificate of the gitea instance"
+  default     = ""
+}
+
 variable "repo" {
   type        = string
   description = "The short name of the repository (i.e. the part after the org/group name)"
@@ -105,4 +111,16 @@ variable "debug" {
   type        = bool
   description = "Flag indicating that debug loggging should be enabled"
   default     = false
+}
+
+variable "ca_cert" {
+  type        = string
+  description = "(optional) The certificate authority certificate for the self-signed cert used by the git server"
+  default     = ""
+}
+
+variable "ca_cert_file" {
+  type        = string
+  description = "(optional) The file containing the certificate authority certificate for the self-signed cert used by the git server"
+  default     = ""
 }

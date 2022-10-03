@@ -1,18 +1,27 @@
 #!/usr/bin/env bash
 
 GIT_REPO=$(cat git_repo)
-GIT_USERNAME=$(cat git_username)
-GIT_TOKEN=$(cat git_token)
+export GIT_USERNAME=$(cat git_username)
+export GIT_TOKEN=$(cat git_token)
+CA_CERT=$(cat git_ca_cert)
 CERT=$(cat sealed_secrets_cert)
+GITOPS_CONFIG=$(cat gitops_config | jq '.')
 BIN_DIR=$(cat .bindir)
+BIN_DIR=$(cd $BIN_DIR; pwd -P)
 
 SERVER_NAME="default"
 
 export PATH="${BIN_DIR}:${PATH}"
 
+if [[ -n "${CA_CERT}" ]]; then
+  export GIT_CA_CERT="/tmp/git-ca.crt"
+
+  echo "${CA_CERT}" | base64 -d > "${GIT_CA_CERT}"
+fi
+
 mkdir -p .testrepo
 
-git clone "https://${GIT_USERNAME}:${GIT_TOKEN}@${GIT_REPO}" .testrepo
+gitu clone "https://${GIT_REPO}" .testrepo
 
 cd .testrepo || exit 1
 
@@ -43,6 +52,7 @@ if [[ "${VALUES_PATH_SUFFIX}" != "cluster/${SERVER_NAME}" ]]; then
   exit 1
 fi
 
+
 REPO_CERT=$(cat kubeseal_cert.pem)
 
 if [[ "${REPO_CERT}" != "${CERT}" ]]; then
@@ -55,6 +65,9 @@ if [[ "${REPO_CERT}" != "${CERT}" ]]; then
   echo "${CERT}"
   exit 1
 fi
+
+BOOTSTRAP_URL=$(echo "${GITOPS_CONFIG}" | jq -r '.bootstrap."argocd-config".url')
+echo "Bootstrap url: ${BOOTSTRAP_URL}"
 
 cd ..
 rm -rf .testrepo

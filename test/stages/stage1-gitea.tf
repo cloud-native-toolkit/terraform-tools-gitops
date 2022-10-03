@@ -5,4 +5,5 @@ module "gitea" {
   olm_namespace       = module.dev_software_olm.olm_namespace
   operator_namespace  = module.dev_software_olm.target_namespace
   instance_namespace  = module.dev_tools_namespace.name
+  ca_cert             = module.dev_cluster.ca_cert
 }
