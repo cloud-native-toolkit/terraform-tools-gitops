@@ -3,7 +3,7 @@
 GIT_REPO=$(cat git_repo)
 export GIT_USERNAME=$(cat git_username)
 export GIT_TOKEN=$(cat git_token)
-export GIT_CA_CERT=$(cat git_ca_cert | base64 -d)
+CA_CERT=$(cat git_ca_cert)
 CERT=$(cat sealed_secrets_cert)
 GITOPS_CONFIG=$(cat gitops_config | jq '.')
 BIN_DIR=$(cat .bindir)
@@ -12,6 +12,12 @@ BIN_DIR=$(cd $BIN_DIR; pwd -P)
 SERVER_NAME="default"
 
 export PATH="${BIN_DIR}:${PATH}"
+
+if [[ -n "${CA_CERT}" ]]; then
+  export GIT_CA_CERT="/tmp/git-ca.crt"
+
+  echo "${CA_CERT}" | base64 -d > "${GIT_CA_CERT}"
+fi
 
 mkdir -p .testrepo
 
