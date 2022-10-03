@@ -48,6 +48,12 @@ output "config_token" {
   depends_on  = [null_resource.initialize_gitops]
 }
 
+output "config_ca_cert" {
+  value       = local.ca_cert
+  description = "The base64 encoded ca certificate for the git server"
+  depends_on  = [null_resource.initialize_gitops]
+}
+
 output "config_paths" {
   description = "The paths in the config repo"
   value = {

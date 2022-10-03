@@ -33,6 +33,10 @@ resource null_resource gitops_output {
   }
 
   provisioner "local-exec" {
+    command = "echo -n '${module.gitops.config_ca_cert}' > git_ca_cert"
+  }
+
+  provisioner "local-exec" {
     command = "echo -n '${module.gitops.sealed_secrets_cert}' > sealed_secrets_cert"
   }
 
