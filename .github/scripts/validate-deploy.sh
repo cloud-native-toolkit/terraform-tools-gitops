@@ -6,6 +6,7 @@ GIT_TOKEN=$(cat git_token)
 CERT=$(cat sealed_secrets_cert)
 GITOPS_CONFIG=$(cat gitops_config | jq '.')
 BIN_DIR=$(cat .bindir)
+BIN_DIR=$(cd $BIN_DIR; pwd -P)
 
 SERVER_NAME="default"
 
