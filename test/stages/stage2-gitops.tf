@@ -39,8 +39,4 @@ resource null_resource gitops_output {
   provisioner "local-exec" {
     command = "echo -n '${jsonencode(module.gitops.gitops_config)}' > gitops_config"
   }
-
-  provisioner "local-exec" {
-    command = "echo -n '${data.clis_check.clis.bin_dir}' > .bindir"
-  }
 }

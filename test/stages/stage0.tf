@@ -18,3 +18,9 @@ provider gitops {
 
   ca_cert = var.ca_cert_file != "" ? file(var.ca_cert_file) : ""
 }
+
+resource local_file bin_dir {
+  filename = ".bindir"
+
+  content = data.clis_check.clis.bin_dir
+}
