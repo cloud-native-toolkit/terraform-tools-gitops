@@ -1,0 +1,56 @@
+global:
+  repoUrl: ""
+  targetRevision: ""
+  targetNamespace: ""
+  destinations:
+    - targetNamespace: "*"
+  pathSuffix: ""
+  prefix: ""
+
+infrastructure:
+  project: 1-infrastructure
+
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: Namespace
+    - group: storage.k8s.io
+      kind: StorageClass
+    - group: security.openshift.io
+      kind: SecurityContextConstraints
+    - group: security.openshift.io
+      kind: SecurityContextConstraint
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+    - group: console.openshift.io
+      kind: ConsoleNotification
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+  applicationTargets:
+    - applications:
+      - name: 1-infrastructure
+        path: argocd/1-infrastructure
+
+services:
+  project: 2-services
+
+  clusterResourceWhitelist:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+  applicationTargets:
+    - applications:
+      - name: 2-services
+        path: argocd/2-services
+
+applications:
+  project: 3-applications
+
+  applicationTargets:
+    - applications:
+      - name: 3-applications
+        path: argocd/3-applications

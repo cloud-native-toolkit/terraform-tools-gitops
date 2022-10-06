@@ -48,7 +48,3 @@ variable "login_token" {
 variable "namespace" {
   default = "gitea"
 }
-
-variable "ca_cert_file" {
-  default = ""
-}

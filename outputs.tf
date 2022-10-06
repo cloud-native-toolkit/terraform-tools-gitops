@@ -1,56 +1,50 @@
 
 output "config_host" {
-  value = local.host
+  value = module.gitops-repo.host
   description = "The host name of the bootstrap git repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_org" {
-  value = local.org
+  value = module.gitops-repo.org
   description = "The org name of the bootstrap git repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_name" {
-  value = var.repo
+  value = module.gitops-repo.name
   description = "The repo name of the bootstrap git repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_project" {
-  value = var.project
+  value = module.gitops-repo.project
   description = "The project name of the bootstrap git repo (for Azure DevOps)"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_repo" {
-  value = local.repo
+  value = module.gitops-repo.repo
   description = "The repo that contains the argocd configuration"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_repo_url" {
-  value = local.url
+  value = module.gitops-repo.url
   description = "The repo that contains the argocd configuration"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_username" {
-  value       = local.username
+  value       = module.gitops-repo.username
   description = "The username for the config repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_token" {
-  value       = local.token
+  value       = module.gitops-repo.token
   description = "The token for the config repo"
   sensitive   = true
-  depends_on  = [null_resource.initialize_gitops]
-}
-
-output "config_ca_cert" {
-  value       = local.ca_cert
-  description = "The base64 encoded ca certificate for the git server"
   depends_on  = [null_resource.initialize_gitops]
 }
 
@@ -82,30 +76,30 @@ output "bootstrap_path" {
 
 output "bootstrap_branch" {
   description = "The branch in the gitrepo containing the bootstrap configuration"
-  value       = local.branch
+  value       = module.gitops-repo.branch
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_repo" {
-  value = local.repo
+  value = module.gitops-repo.repo
   description = "The repo that contains the application configuration"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_repo_url" {
-  value = local.url
+  value = module.gitops-repo.url
   description = "The repo that contains the application configuration"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_username" {
-  value       = local.username
+  value       = module.gitops-repo.username
   description = "The username for the application repo"
   depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_token" {
-  value       = local.token
+  value       = module.gitops-repo.token
   description = "The token for the application repo"
   depends_on  = [null_resource.initialize_gitops]
   sensitive   = true
@@ -142,5 +136,5 @@ output "server_name" {
 
 output "sealed_secrets_cert" {
   description = "The certificate used to encrypt sealed secrets"
-  value = var.sealed_secrets_cert
+  value = data.external.cert.result.cert
 }
