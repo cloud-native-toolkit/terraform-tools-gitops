@@ -12,14 +12,12 @@ on:
         required: false
       GIT_PROJECT:
         required: false
-      CA_CERT:
-        required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   verify:
     runs-on: ubuntu-latest
-    container: quay.io/cloudnativetoolkit/terraform:v1.2
+    container: quay.io/cloudnativetoolkit/terraform:v1.1
 
     strategy:
       matrix:
@@ -27,10 +25,9 @@ jobs:
           - github.com
           - github.ibm.com
           - us-south.git.cloud.ibm.com
-#          - bitbucket.org
-#          - dev.azure.com
+          - bitbucket.org
+          - dev.azure.com
           - gitea
-          - gitea-gitea.apps.sms-gitea.ocp-azure.ibm-software-everywhere.dev
       fail-fast: false
 
     env:
@@ -47,10 +44,9 @@ jobs:
           GIT_ORG: ${{ secrets.GIT_ORG }}
           GITU_CONFIG: ${{ secrets.GITU_CONFIG }}
           GIT_PROJECT: ${{ secrets.GIT_PROJECT }}
-          CA_CERT: ${{ secrets.CA_CERT }}
         shell: bash
         run: |
-          repo=$(echo "${GITHUB_REPOSITORY}" | sed -E "s~.*/[^-]+-(.*)~\1f~g")
+          repo=$(echo "${GITHUB_REPOSITORY}" | sed -E "s~.*/[^-]+-(.*)~\1a~g")
           echo "Repo: $repo"
           echo "::set-output name=repo::$repo"
 
@@ -86,18 +82,6 @@ jobs:
             exit 1
           fi
           echo "::set-output name=token::$token"
-          
-          ca_cert=$(echo "${GITU_CONFIG}" |  yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .caCert // ""')
-          ca_cert_file=""
-          if [[ -n "${ca_cert}" ]]; then
-            echo "CA certificate config found"
-            ca_cert_dir="/tmp/cert"
-            mkdir -p "${ca_cert_dir}"
-            
-            ca_cert_file="${ca_cert_dir}/ca.crt"
-            echo "${CA_CERT}" > "${ca_cert_file}"
-          fi
-          echo "::set-output name=ca_cert_file::$ca_cert_file"
 
       - name: Verify deploy on ${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-deploy@main
@@ -112,7 +96,6 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
-          TF_VAR_ca_cert_file: ${{ steps.variables.outputs.ca_cert_file }}
 
       - name: Verify destroy on ${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-destroy@main
@@ -127,4 +110,3 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
-          TF_VAR_ca_cert_file: ${{ steps.variables.outputs.ca_cert_file }}

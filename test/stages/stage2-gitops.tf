@@ -14,9 +14,11 @@ module "gitops" {
   gitea_org = module.gitea.org
   gitea_username = module.gitea.username
   gitea_token = module.gitea.token
-  gitea_ca_cert = module.gitea.ca_cert
-  ca_cert_file = var.ca_cert_file
   debug = true
+}
+
+module setup_clis {
+  source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
 }
 
 resource null_resource gitops_output {
@@ -33,14 +35,10 @@ resource null_resource gitops_output {
   }
 
   provisioner "local-exec" {
-    command = "echo -n '${module.gitops.config_ca_cert}' > git_ca_cert"
-  }
-
-  provisioner "local-exec" {
     command = "echo -n '${module.gitops.sealed_secrets_cert}' > sealed_secrets_cert"
   }
 
   provisioner "local-exec" {
-    command = "echo -n '${jsonencode(module.gitops.gitops_config)}' > gitops_config"
+    command = "echo -n '${module.setup_clis.bin_dir}' > .bindir"
   }
 }
