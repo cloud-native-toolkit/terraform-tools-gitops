@@ -5,4 +5,5 @@ provider "gitops" {
 }
 
 data clis_check clis {
+  clis = ["yq", "jq", "gitu"]
 }
