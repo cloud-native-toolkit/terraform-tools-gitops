@@ -8,6 +8,9 @@ BIN_DIR=$(cat .bindir)
 
 SERVER_NAME="default"
 
+echo "Bin dir: ${BIN_DIR}"
+ls "${BIN_DIR}"
+
 export PATH="${BIN_DIR}:${PATH}"
 
 mkdir -p .testrepo
