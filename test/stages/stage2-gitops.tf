@@ -35,6 +35,6 @@ resource null_resource gitops_output {
   }
 
   provisioner "local-exec" {
-    command = "echo -n '${module.setup_clis.bin_dir}' > .bindir"
+    command = "echo -n '${data.clis_check.clis.bin_dir}' > .bindir"
   }
 }
