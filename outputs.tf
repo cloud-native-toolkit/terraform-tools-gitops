@@ -20,7 +20,7 @@ output "config_project" {
 }
 
 output "config_repo" {
-  value = gitops_repo.repo.repo
+  value = gitops_repo.repo.repo_slug
   description = "The repo that contains the argocd configuration"
 }
 
@@ -74,7 +74,7 @@ output "bootstrap_branch" {
 }
 
 output "application_repo" {
-  value = gitops_repo.repo.repo
+  value = gitops_repo.repo.repo_slug
   description = "The repo that contains the application configuration"
 }
 
