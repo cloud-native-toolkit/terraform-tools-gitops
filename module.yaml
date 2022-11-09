@@ -8,6 +8,11 @@ tags:
     - gitops
 versions:
 - platforms: []
+  providers:
+    - name: gitops
+      source: "cloud-native-toolkit/gitops"
+    - name: clis
+      source: "cloud-native-toolkit/clis"
   dependencies:
     - id: cert
       optional: true

@@ -1,51 +1,44 @@
 
 output "config_host" {
-  value = module.gitops-repo.host
+  value = gitops_repo.repo.host
   description = "The host name of the bootstrap git repo"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_org" {
-  value = module.gitops-repo.org
+  value = gitops_repo.repo.org
   description = "The org name of the bootstrap git repo"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_name" {
-  value = module.gitops-repo.name
+  value = gitops_repo.repo.repo
   description = "The repo name of the bootstrap git repo"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_project" {
-  value = module.gitops-repo.project
+  value = gitops_repo.repo.project
   description = "The project name of the bootstrap git repo (for Azure DevOps)"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_repo" {
-  value = module.gitops-repo.repo
+  value = gitops_repo.repo.repo_slug
   description = "The repo that contains the argocd configuration"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_repo_url" {
-  value = module.gitops-repo.url
+  value = gitops_repo.repo.url
   description = "The repo that contains the argocd configuration"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_username" {
-  value       = module.gitops-repo.username
+  value       = gitops_repo.repo.username
   description = "The username for the config repo"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "config_token" {
-  value       = module.gitops-repo.token
+  value       = gitops_repo.repo.token
   description = "The token for the config repo"
   sensitive   = true
-  depends_on  = [null_resource.initialize_gitops]
+  depends_on  = [gitops_repo.repo]
 }
 
 output "config_paths" {
@@ -55,7 +48,7 @@ output "config_paths" {
     services       = "argocd/2-services"
     applications   = "argocd/3-applications"
   }
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "config_projects" {
@@ -65,43 +58,39 @@ output "config_projects" {
     services       = "2-services"
     applications   = "3-applications"
   }
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "bootstrap_path" {
   description = "The path to the bootstrap configuration"
   value       = local.bootstrap_path
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "bootstrap_branch" {
   description = "The branch in the gitrepo containing the bootstrap configuration"
-  value       = module.gitops-repo.branch
-  depends_on = [null_resource.initialize_gitops]
+  value       = gitops_repo.repo.branch
+  depends_on = [gitops_repo.repo]
 }
 
 output "application_repo" {
-  value = module.gitops-repo.repo
+  value = gitops_repo.repo.repo_slug
   description = "The repo that contains the application configuration"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_repo_url" {
-  value = module.gitops-repo.url
+  value = gitops_repo.repo.url
   description = "The repo that contains the application configuration"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_username" {
-  value       = module.gitops-repo.username
+  value       = gitops_repo.repo.username
   description = "The username for the application repo"
-  depends_on = [null_resource.initialize_gitops]
 }
 
 output "application_token" {
-  value       = module.gitops-repo.token
+  value       = gitops_repo.repo.token
   description = "The token for the application repo"
-  depends_on  = [null_resource.initialize_gitops]
   sensitive   = true
 }
 
@@ -112,26 +101,26 @@ output "application_paths" {
     services       = "payload/2-services"
     applications   = "payload/3-applications"
   }
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "gitops_config" {
   description = "Config information regarding the gitops repo structure"
   value = local.gitops_config
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "git_credentials" {
   description = "The credentials for the gitops repo(s)"
   value = local.git_credentials
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
   sensitive = true
 }
 
 output "server_name" {
   description = "The name of the cluster that will be configured for gitops"
   value = var.server_name
-  depends_on = [null_resource.initialize_gitops]
+  depends_on = [gitops_repo.repo]
 }
 
 output "sealed_secrets_cert" {

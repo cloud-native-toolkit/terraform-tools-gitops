@@ -8,6 +8,9 @@ BIN_DIR=$(cat .bindir)
 
 SERVER_NAME="default"
 
+echo "Bin dir: ${BIN_DIR}"
+ls "${BIN_DIR}"
+
 export PATH="${BIN_DIR}:${PATH}"
 
 mkdir -p .testrepo
@@ -23,7 +26,7 @@ if [[ ! -f "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml" ]]; then
   exit 1
 fi
 
-CHART_NAME=$(yq4 eval '.name' "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml")
+CHART_NAME=$(yq eval '.name' "argocd/0-bootstrap/cluster/${SERVER_NAME}/Chart.yaml")
 if [[ "${CHART_NAME}" != "${SERVER_NAME}" ]]; then
   echo "Chart name does not match server name: ${CHART_NAME}"
   exit 1
@@ -37,7 +40,7 @@ fi
 echo "Printing argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml"
 cat argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml
 
-VALUES_PATH_SUFFIX=$(yq4 eval '.global.pathSuffix' "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml")
+VALUES_PATH_SUFFIX=$(yq eval '.global.pathSuffix' "argocd/0-bootstrap/cluster/${SERVER_NAME}/values.yaml")
 if [[ "${VALUES_PATH_SUFFIX}" != "cluster/${SERVER_NAME}" ]]; then
   echo "global.pathSuffix value in values.yaml does not match expected: ${VALUES_PATH_SUFFIX}"
   exit 1
