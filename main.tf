@@ -41,7 +41,7 @@ data external cert {
   query = {
     bin_dir = data.clis_check.clis.bin_dir
     tmp_dir = local.tmp_dir
-    repo = gitops_repo.repo.repo
+    repo = gitops_repo.repo.repo_slug
     username = gitops_repo.repo.username
     token = gitops_repo.repo.token
   }
