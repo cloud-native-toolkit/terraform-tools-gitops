@@ -29,6 +29,11 @@ output "config_repo_url" {
   description = "The repo that contains the argocd configuration"
 }
 
+output "config_ca_cert" {
+  value = gitops_repo.repo.result_ca_cert
+  description = "The ca cert for the self-signed certificate used by the gitops repo"
+}
+
 output "config_username" {
   value       = gitops_repo.repo.username
   description = "The username for the config repo"
@@ -69,7 +74,7 @@ output "bootstrap_path" {
 
 output "bootstrap_branch" {
   description = "The branch in the gitrepo containing the bootstrap configuration"
-  value       = gitops_repo.repo.branch
+  value       = gitops_repo.repo.result_branch
   depends_on = [gitops_repo.repo]
 }
 
@@ -119,8 +124,7 @@ output "git_credentials" {
 
 output "server_name" {
   description = "The name of the cluster that will be configured for gitops"
-  value = var.server_name
-  depends_on = [gitops_repo.repo]
+  value = gitops_repo.repo.result_server_name
 }
 
 output "sealed_secrets_cert" {
