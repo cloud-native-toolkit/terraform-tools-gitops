@@ -1,11 +1,11 @@
 
 output "config_host" {
-  value = gitops_repo.repo.host
+  value = gitops_repo.repo.result_host
   description = "The host name of the bootstrap git repo"
 }
 
 output "config_org" {
-  value = gitops_repo.repo.org
+  value = gitops_repo.repo.result_org
   description = "The org name of the bootstrap git repo"
 }
 
@@ -15,7 +15,7 @@ output "config_name" {
 }
 
 output "config_project" {
-  value = gitops_repo.repo.project
+  value = gitops_repo.repo.result_project
   description = "The project name of the bootstrap git repo (for Azure DevOps)"
 }
 
@@ -35,12 +35,12 @@ output "config_ca_cert" {
 }
 
 output "config_username" {
-  value       = gitops_repo.repo.username
+  value       = gitops_repo.repo.result_username
   description = "The username for the config repo"
 }
 
 output "config_token" {
-  value       = gitops_repo.repo.token
+  value       = gitops_repo.repo.result_token
   description = "The token for the config repo"
   sensitive   = true
   depends_on  = [gitops_repo.repo]
@@ -89,12 +89,12 @@ output "application_repo_url" {
 }
 
 output "application_username" {
-  value       = gitops_repo.repo.username
+  value       = gitops_repo.repo.result_username
   description = "The username for the application repo"
 }
 
 output "application_token" {
-  value       = gitops_repo.repo.token
+  value       = gitops_repo.repo.result_token
   description = "The token for the application repo"
   sensitive   = true
 }
