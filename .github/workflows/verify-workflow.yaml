@@ -24,6 +24,7 @@ jobs:
           - github.com
           - github.ibm.com
           - us-south.git.cloud.ibm.com
+          - gitea
         cluster:
           - ocp4_latest
           - iks_latest
@@ -101,6 +102,7 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
+          TF_LOG_PROVIDER_GITOPS: DEBUG
 
       - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.git-config }}
         uses: cloud-native-toolkit/action-module-verify-destroy@v2
@@ -116,3 +118,4 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
+          TF_LOG_PROVIDER_GITOPS: DEBUG
