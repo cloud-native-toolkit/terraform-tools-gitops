@@ -35,31 +35,6 @@ variable "token" {
   default     = ""
 }
 
-variable "gitea_host" {
-  type        = string
-  description = "The host for the default gitea repository."
-  default     = ""
-}
-
-variable "gitea_org" {
-  type        = string
-  description = "The org/group for the default gitea repository. If not provided, the value will default to the username org"
-  default     = ""
-}
-
-variable "gitea_username" {
-  type        = string
-  description = "The username of the default gitea repository"
-  default     = ""
-}
-
-variable "gitea_token" {
-  type        = string
-  description = "The personal access token used to access the repository"
-  sensitive   = true
-  default     = ""
-}
-
 variable "repo" {
   type        = string
   description = "The short name of the repository (i.e. the part after the org/group name)"

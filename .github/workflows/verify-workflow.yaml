@@ -17,7 +17,6 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    container: quay.io/cloudnativetoolkit/terraform:v1.2
 
     strategy:
       matrix:
@@ -25,18 +24,23 @@ jobs:
           - github.com
           - github.ibm.com
           - us-south.git.cloud.ibm.com
-#          - bitbucket.org
-#          - dev.azure.com
-          - gitea
+        cluster:
+          - ocp4_latest
+          - iks_latest
       fail-fast: false
-
-    env:
-      HOME: /home/devops
+      max-parallel: 1
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.9
+
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.34.1
 
       - id: variables
         name: Set up variables
@@ -48,46 +52,47 @@ jobs:
         run: |
           repo=$(echo "${GITHUB_REPOSITORY}" | sed -E "s~.*/[^-]+-(.*)~\1k~g")
           echo "Repo: $repo"
-          echo "::set-output name=repo::$repo"
+          echo "repo=$repo" >> $GITHUB_OUTPUT
 
           org="${GIT_ORG:-cloud-native-toolkit-test}"
           echo "Org: $org"
-          echo "::set-output name=org::$org"
+          echo "org=$org" >> $GITHUB_OUTPUT
           
           project="${GIT_PROJECT:-Test}"
           echo "Project: $project"
-          echo "::set-output name=project::$project"
+          echo "project=$project" >> $GITHUB_OUTPUT
           
           if [[ "gitea" == "${{ matrix.testcase }}" ]]; then
-            echo "::set-output name=host::"
-            echo "::set-output name=username::"
-            echo "::set-output name=token::"        
+            echo "host=''" >> $GITHUB_OUTPUT
+            echo "username=''" >> $GITHUB_OUTPUT
+            echo "token=''" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "::set-output name=host::${{ matrix.testcase }}"            
+            echo "host=${{ matrix.testcase }}" >> $GITHUB_OUTPUT
           fi
           
-          username=$(echo "${GITU_CONFIG}" |  yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .username')
+          username=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .username')
           echo "Username: $username"
           if [[ -z "${username}" ]]; then
             echo "Username config missing" >&2
             exit 1
           fi
-          echo "::set-output name=username::$username"
+          echo "username=$username" >> $GITHUB_OUTPUT
           
-          token=$(echo "${GITU_CONFIG}" |  yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .token')
+          token=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .token')
           echo "Token: xxx"
           if [[ -z "${token}" ]]; then
             echo "Token config missing" >&2
             exit 1
           fi
-          echo "::set-output name=token::$token"
+          echo "token=$token" >> $GITHUB_OUTPUT
 
-      - name: Verify deploy on ${{ matrix.testcase }}
-        uses: cloud-native-toolkit/action-module-verify-deploy@main
+      - name: Verify deploy on ${{ matrix.cluster }},${{ matrix.git-config }}
+        uses: cloud-native-toolkit/action-module-verify-deploy@v2
         with:
-          clusterId: "ibm_ocp49"
+          testcase: ${{ matrix.cluster }}
           validateDeployScript: .github/scripts/validate-deploy.sh
+          testStagesDir: example
         env:
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
           TF_VAR_git_host: ${{ steps.variables.outputs.host }}
@@ -97,11 +102,12 @@ jobs:
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
 
-      - name: Verify destroy on ${{ matrix.testcase }}
-        uses: cloud-native-toolkit/action-module-verify-destroy@main
+      - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.git-config }}
+        uses: cloud-native-toolkit/action-module-verify-destroy@v2
         if: ${{ always() }}
         with:
-          clusterId: "ibm_ocp49"
+          testcase: ${{ matrix.cluster }}
+          testStagesDir: example
         env:
           TF_VAR_ibmcloud_api_key: ${{ secrets.IBMCLOUD_API_KEY }}
           TF_VAR_git_host: ${{ steps.variables.outputs.host }}

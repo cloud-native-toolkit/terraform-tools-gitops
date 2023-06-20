@@ -48,3 +48,15 @@ variable "login_token" {
 variable "namespace" {
   default = "gitea"
 }
+
+variable "region" {
+}
+
+variable "resource_group_name" {
+}
+
+variable "cluster_name" {
+}
+
+variable "name_prefix" {
+}

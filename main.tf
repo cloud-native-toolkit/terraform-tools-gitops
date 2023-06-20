@@ -5,12 +5,12 @@ locals {
   cert_file = "${path.cwd}/.tmp/gitops/kubeseal_cert.pem"
 
   git_default = var.host == "" || var.username == "" || var.token == ""
-  tmp_org = local.git_default ? var.gitea_org : var.org
+  tmp_org = var.org
 
-  host = local.git_default ? var.gitea_host : var.host
+  host = var.host
   org = local.tmp_org != "" ? local.tmp_org : local.username
-  username = local.git_default ? var.gitea_username : var.username
-  token = local.git_default ? var.gitea_token : var.token
+  username = var.username
+  token = var.token
 
   gitops_config = jsondecode(gitops_repo.repo.gitops_config)
   git_credentials = jsondecode(gitops_repo.repo.git_credentials)

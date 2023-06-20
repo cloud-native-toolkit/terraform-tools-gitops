@@ -1,5 +1,5 @@
 module "gitops" {
-  source = "./module"
+  source = "../"
 
   host = var.git_host
   org  = ""
