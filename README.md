@@ -38,6 +38,8 @@ This module makes use of the output from other modules:
 
 ## Example usage
 
+See [example/](example) folder for full example usage
+
 ```hcl-terraform
 module "git" {
   source = "github.com/cloud-native-toolkit/terraform-tools-gitops"
