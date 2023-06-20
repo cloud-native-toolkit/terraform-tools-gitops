@@ -4,7 +4,6 @@ module "cluster" {
   resource_group_name = var.resource_group_name
   region = var.region
   name = var.cluster_name
-  name_prefix = var.name_prefix
 }
 
 resource null_resource output_kubeconfig {

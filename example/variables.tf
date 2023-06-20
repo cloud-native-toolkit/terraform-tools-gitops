@@ -34,9 +34,6 @@ variable "git_project" {
   default = ""
 }
 
-variable "server_url" {
-}
-
 variable "ingress_subdomain" {
   default = ""
 }
@@ -56,7 +53,4 @@ variable "resource_group_name" {
 }
 
 variable "cluster_name" {
-}
-
-variable "name_prefix" {
 }
