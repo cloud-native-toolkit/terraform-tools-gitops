@@ -88,7 +88,7 @@ jobs:
           fi
           echo "token=$token" >> $GITHUB_OUTPUT
 
-      - name: Verify deploy on ${{ matrix.cluster }},${{ matrix.git-config }}
+      - name: Verify deploy on ${{ matrix.cluster }},${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-deploy@v2
         with:
           testcase: ${{ matrix.cluster }}
@@ -102,9 +102,9 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
-          TF_LOG_PROVIDER_GITOPS: DEBUG
+          TF_LOG_PROVIDER: DEBUG
 
-      - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.git-config }}
+      - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.testcase }}
         uses: cloud-native-toolkit/action-module-verify-destroy@v2
         if: ${{ always() }}
         with:
@@ -118,4 +118,4 @@ jobs:
           TF_VAR_git_org: ${{ steps.variables.outputs.org }}
           TF_VAR_git_repo: ${{ steps.variables.outputs.repo }}
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
-          TF_LOG_PROVIDER_GITOPS: DEBUG
+          TF_LOG_PROVIDER: DEBUG
