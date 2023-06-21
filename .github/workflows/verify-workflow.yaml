@@ -64,9 +64,9 @@ jobs:
           echo "project=$project" >> $GITHUB_OUTPUT
           
           if [[ "gitea" == "${{ matrix.testcase }}" ]]; then
-            echo "host=''" >> $GITHUB_OUTPUT
-            echo "username=''" >> $GITHUB_OUTPUT
-            echo "token=''" >> $GITHUB_OUTPUT
+            echo "host=" >> $GITHUB_OUTPUT
+            echo "username=" >> $GITHUB_OUTPUT
+            echo "token=" >> $GITHUB_OUTPUT
             exit 0
           else
             echo "host=${{ matrix.testcase }}" >> $GITHUB_OUTPUT
