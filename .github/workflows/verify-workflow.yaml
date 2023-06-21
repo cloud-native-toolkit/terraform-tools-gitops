@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        testcase:
+        git-host:
           - github.com
           - github.ibm.com
           - us-south.git.cloud.ibm.com
@@ -63,16 +63,16 @@ jobs:
           echo "Project: $project"
           echo "project=$project" >> $GITHUB_OUTPUT
           
-          if [[ "gitea" == "${{ matrix.testcase }}" ]]; then
+          if [[ "gitea" == "${{ matrix.git-host }}" ]]; then
             echo "host=" >> $GITHUB_OUTPUT
             echo "username=" >> $GITHUB_OUTPUT
             echo "token=" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "host=${{ matrix.testcase }}" >> $GITHUB_OUTPUT
+            echo "host=${{ matrix.git-host }}" >> $GITHUB_OUTPUT
           fi
           
-          username=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .username')
+          username=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.git-host }}") | .username')
           echo "Username: $username"
           if [[ -z "${username}" ]]; then
             echo "Username config missing" >&2
@@ -80,7 +80,7 @@ jobs:
           fi
           echo "username=$username" >> $GITHUB_OUTPUT
           
-          token=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.testcase }}") | .token')
+          token=$(echo "${GITU_CONFIG}" | yq '.credentials[] | select(.host == "${{ matrix.git-host }}") | .token')
           echo "Token: xxx"
           if [[ -z "${token}" ]]; then
             echo "Token config missing" >&2
@@ -88,7 +88,7 @@ jobs:
           fi
           echo "token=$token" >> $GITHUB_OUTPUT
 
-      - name: Verify deploy on ${{ matrix.cluster }},${{ matrix.testcase }}
+      - name: Verify deploy on ${{ matrix.cluster }},${{ matrix.git-host }}
         uses: cloud-native-toolkit/action-module-verify-deploy@v2
         with:
           testcase: ${{ matrix.cluster }}
@@ -104,7 +104,7 @@ jobs:
           TF_VAR_git_project: ${{ steps.variables.outputs.project }}
           TF_LOG_PROVIDER: DEBUG
 
-      - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.testcase }}
+      - name: Verify destroy on ${{ matrix.cluster }},${{ matrix.git-host }}
         uses: cloud-native-toolkit/action-module-verify-destroy@v2
         if: ${{ always() }}
         with:
