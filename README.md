@@ -15,7 +15,19 @@ The module supports creating a repository in one of six different git servers:
 - Gitea
 - Azure DevOps
 
-The selection of the git server type is determined by the value provided for the `host`.
+The selection of the git server type is determined by the value provided for the `host` and the returned api headers.
+
+## Default git server config
+
+This module allows for fall-back git server configuration if the git server configuration values are not
+provided as input. This default git server is typically Gitea and previously the gitea config values were explicitly
+provided as direct input to this module. With a recent change, these values have been removed and should be provided
+via the `gitops` provider configuration in the `default_***` fields. See [example/provider.tf](example/provider.tf) for
+an example of this configuration.
+
+**Note:** This is actually how the test case is configured. For all the test cases, the gitea config is provided for 
+the default git server information. When the test case is non-gitea, the git server information is provided in the `host`,
+`org`, `username`, and `token` fields. For the gitea test case, those fields are left blank and the gitea config is used.
 
 ## Software dependencies
 
@@ -28,13 +40,14 @@ The module depends on the following software components:
 
 ### Terraform providers
 
-- None
+- cloud-native-toolkit/gitops
+- cloud-native-toolkit/clis
 
 ## Module dependencies
 
 This module makes use of the output from other modules:
 
-- None
+- Sealed Secret Cert - github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
 
 ## Example usage
 

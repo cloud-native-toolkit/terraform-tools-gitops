@@ -4,12 +4,6 @@ variable "host" {
   default     = ""
 }
 
-variable "type" {
-  type        = string
-  description = "[Deprecated] The type of the hosted git repository."
-  default     = ""
-}
-
 variable "org" {
   type        = string
   description = "The org/group where the git repository exists/will be provisioned. If the value is left blank then the username org will be used."
