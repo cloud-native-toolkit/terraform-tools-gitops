@@ -55,3 +55,4 @@ module "git" {
   strict = var.gitops_strict
 }
 ```
+
