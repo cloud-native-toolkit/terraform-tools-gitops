@@ -1,5 +1,5 @@
 module "gitops" {
-  source = "./module"
+  source = "../"
 
   host = var.git_host
   org  = ""
@@ -10,10 +10,6 @@ module "gitops" {
   gitops_namespace = var.gitops_namespace
   sealed_secrets_cert = module.cert.cert
   strict = true
-  gitea_host = module.gitea.host
-  gitea_org = module.gitea.org
-  gitea_username = module.gitea.username
-  gitea_token = module.gitea.token
   debug = true
 }
 

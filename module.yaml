@@ -19,32 +19,11 @@ versions:
       refs:
         - source: github.com/cloud-native-toolkit/terraform-util-sealed-secret-cert
           version: ">= 1.0.0"
-    - id: gitea
-      optional: true
-      refs:
-        - source: github.com/cloud-native-toolkit/terraform-tools-gitea
-          version: ">= 0.3.0"
   variables:
     - name: sealed_secrets_cert
       moduleRef:
         id: cert
         output: cert
-    - name: gitea_host
-      moduleRef:
-        id: gitea
-        output: host
-    - name: gitea_org
-      moduleRef:
-        id: gitea
-        output: org
-    - name: gitea_username
-      moduleRef:
-        id: gitea
-        output: username
-    - name: gitea_token
-      moduleRef:
-        id: gitea
-        output: token
     - name: host
       important: true
     - name: org

@@ -4,12 +4,6 @@ variable "host" {
   default     = ""
 }
 
-variable "type" {
-  type        = string
-  description = "[Deprecated] The type of the hosted git repository."
-  default     = ""
-}
-
 variable "org" {
   type        = string
   description = "The org/group where the git repository exists/will be provisioned. If the value is left blank then the username org will be used."
@@ -29,31 +23,6 @@ variable "username" {
 }
 
 variable "token" {
-  type        = string
-  description = "The personal access token used to access the repository"
-  sensitive   = true
-  default     = ""
-}
-
-variable "gitea_host" {
-  type        = string
-  description = "The host for the default gitea repository."
-  default     = ""
-}
-
-variable "gitea_org" {
-  type        = string
-  description = "The org/group for the default gitea repository. If not provided, the value will default to the username org"
-  default     = ""
-}
-
-variable "gitea_username" {
-  type        = string
-  description = "The username of the default gitea repository"
-  default     = ""
-}
-
-variable "gitea_token" {
   type        = string
   description = "The personal access token used to access the repository"
   sensitive   = true
